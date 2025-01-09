@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.chatgenius.repository.ChannelRepositoryTest" time="0.133" tests="2" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="J:\chatgeniusv2-backend\target\test-classes;J:\chatgeniusv2-backend\target\classes;J:\.m2\repository\org\springframework\boot\spring-boot-starter-web\3.2.1\spring-boot-starter-web-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter\3.2.1\spring-boot-starter-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot\3.2.1\spring-boot-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\3.2.1\spring-boot-autoconfigure-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-logging\3.2.1\spring-boot-starter-logging-3.2.1.jar;J:\.m2\repository\ch\qos\logback\logback-classic\1.4.14\logback-classic-1.4.14.jar;J:\.m2\repository\ch\qos\logback\logback-core\1.4.14\logback-core-1.4.14.jar;J:\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.21.1\log4j-to-slf4j-2.21.1.jar;J:\.m2\repository\org\apache\logging\log4j\log4j-api\2.21.1\log4j-api-2.21.1.jar;J:\.m2\repository\org\slf4j\jul-to-slf4j\2.0.9\jul-to-slf4j-2.0.9.jar;J:\.m2\repository\jakarta\annotation\jakarta.annotation-api\2.1.1\jakarta.annotation-api-2.1.1.jar;J:\.m2\repository\org\yaml\snakeyaml\2.2\snakeyaml-2.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-json\3.2.1\spring-boot-starter-json-3.2.1.jar;J:\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jdk8\2.15.3\jackson-datatype-jdk8-2.15.3.jar;J:\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.15.3\jackson-datatype-jsr310-2.15.3.jar;J:\.m2\repository\com\fasterxml\jackson\module\jackson-module-parameter-names\2.15.3\jackson-module-parameter-names-2.15.3.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat\3.2.1\spring-boot-starter-tomcat-3.2.1.jar;J:\.m2\repository\org\apache\tomcat\embed\tomcat-embed-core\10.1.17\tomcat-embed-core-10.1.17.jar;J:\.m2\repository\org\apache\tomcat\embed\tomcat-embed-websocket\10.1.17\tomcat-embed-websocket-10.1.17.jar;J:\.m2\repository\org\springframework\spring-web\6.1.2\spring-web-6.1.2.jar;J:\.m2\repository\org\springframework\spring-beans\6.1.2\spring-beans-6.1.2.jar;J:\.m2\repository\io\micrometer\micrometer-observation\1.12.1\micrometer-observation-1.12.1.jar;J:\.m2\repository\io\micrometer\micrometer-commons\1.12.1\micrometer-commons-1.12.1.jar;J:\.m2\repository\org\springframework\spring-webmvc\6.1.2\spring-webmvc-6.1.2.jar;J:\.m2\repository\org\springframework\spring-context\6.1.2\spring-context-6.1.2.jar;J:\.m2\repository\org\springframework\spring-expression\6.1.2\spring-expression-6.1.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-data-jpa\3.2.1\spring-boot-starter-data-jpa-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-aop\3.2.1\spring-boot-starter-aop-3.2.1.jar;J:\.m2\repository\org\aspectj\aspectjweaver\1.9.21\aspectjweaver-1.9.21.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-jdbc\3.2.1\spring-boot-starter-jdbc-3.2.1.jar;J:\.m2\repository\com\zaxxer\HikariCP\5.0.1\HikariCP-5.0.1.jar;J:\.m2\repository\org\springframework\spring-jdbc\6.1.2\spring-jdbc-6.1.2.jar;J:\.m2\repository\org\hibernate\orm\hibernate-core\6.4.1.Final\hibernate-core-6.4.1.Final.jar;J:\.m2\repository\jakarta\persistence\jakarta.persistence-api\3.1.0\jakarta.persistence-api-3.1.0.jar;J:\.m2\repository\jakarta\transaction\jakarta.transaction-api\2.0.1\jakarta.transaction-api-2.0.1.jar;J:\.m2\repository\org\jboss\logging\jboss-logging\3.5.3.Final\jboss-logging-3.5.3.Final.jar;J:\.m2\repository\org\hibernate\common\hibernate-commons-annotations\6.0.6.Final\hibernate-commons-annotations-6.0.6.Final.jar;J:\.m2\repository\io\smallrye\jandex\3.1.2\jandex-3.1.2.jar;J:\.m2\repository\com\fasterxml\classmate\1.6.0\classmate-1.6.0.jar;J:\.m2\repository\net\bytebuddy\byte-buddy\1.14.10\byte-buddy-1.14.10.jar;J:\.m2\repository\org\glassfish\jaxb\jaxb-runtime\4.0.4\jaxb-runtime-4.0.4.jar;J:\.m2\repository\org\glassfish\jaxb\jaxb-core\4.0.4\jaxb-core-4.0.4.jar;J:\.m2\repository\org\eclipse\angus\angus-activation\2.0.1\angus-activation-2.0.1.jar;J:\.m2\repository\org\glassfish\jaxb\txw2\4.0.4\txw2-4.0.4.jar;J:\.m2\repository\com\sun\istack\istack-commons-runtime\4.1.2\istack-commons-runtime-4.1.2.jar;J:\.m2\repository\jakarta\inject\jakarta.inject-api\2.0.1\jakarta.inject-api-2.0.1.jar;J:\.m2\repository\org\antlr\antlr4-runtime\4.13.0\antlr4-runtime-4.13.0.jar;J:\.m2\repository\org\springframework\data\spring-data-jpa\3.2.1\spring-data-jpa-3.2.1.jar;J:\.m2\repository\org\springframework\data\spring-data-commons\3.2.1\spring-data-commons-3.2.1.jar;J:\.m2\repository\org\springframework\spring-orm\6.1.2\spring-orm-6.1.2.jar;J:\.m2\repository\org\springframework\spring-tx\6.1.2\spring-tx-6.1.2.jar;J:\.m2\repository\org\slf4j\slf4j-api\2.0.9\slf4j-api-2.0.9.jar;J:\.m2\repository\org\springframework\spring-aspects\6.1.2\spring-aspects-6.1.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-security\3.2.1\spring-boot-starter-security-3.2.1.jar;J:\.m2\repository\org\springframework\spring-aop\6.1.2\spring-aop-6.1.2.jar;J:\.m2\repository\org\springframework\security\spring-security-config\6.2.1\spring-security-config-6.2.1.jar;J:\.m2\repository\org\springframework\security\spring-security-web\6.2.1\spring-security-web-6.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-validation\3.2.1\spring-boot-starter-validation-3.2.1.jar;J:\.m2\repository\org\apache\tomcat\embed\tomcat-embed-el\10.1.17\tomcat-embed-el-10.1.17.jar;J:\.m2\repository\org\hibernate\validator\hibernate-validator\8.0.1.Final\hibernate-validator-8.0.1.Final.jar;J:\.m2\repository\jakarta\validation\jakarta.validation-api\3.0.2\jakarta.validation-api-3.0.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-websocket\3.2.1\spring-boot-starter-websocket-3.2.1.jar;J:\.m2\repository\org\springframework\spring-messaging\6.1.2\spring-messaging-6.1.2.jar;J:\.m2\repository\org\springframework\spring-websocket\6.1.2\spring-websocket-6.1.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-data-redis\3.2.1\spring-boot-starter-data-redis-3.2.1.jar;J:\.m2\repository\io\lettuce\lettuce-core\6.3.0.RELEASE\lettuce-core-6.3.0.RELEASE.jar;J:\.m2\repository\io\netty\netty-common\4.1.104.Final\netty-common-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-handler\4.1.104.Final\netty-handler-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-transport-native-unix-common\4.1.104.Final\netty-transport-native-unix-common-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-transport\4.1.104.Final\netty-transport-4.1.104.Final.jar;J:\.m2\repository\io\projectreactor\reactor-core\3.6.1\reactor-core-3.6.1.jar;J:\.m2\repository\org\springframework\data\spring-data-redis\3.2.1\spring-data-redis-3.2.1.jar;J:\.m2\repository\org\springframework\data\spring-data-keyvalue\3.2.1\spring-data-keyvalue-3.2.1.jar;J:\.m2\repository\org\springframework\spring-oxm\6.1.2\spring-oxm-6.1.2.jar;J:\.m2\repository\org\springframework\spring-context-support\6.1.2\spring-context-support-6.1.2.jar;J:\.m2\repository\org\postgresql\postgresql\42.6.0\postgresql-42.6.0.jar;J:\.m2\repository\org\checkerframework\checker-qual\3.31.0\checker-qual-3.31.0.jar;J:\.m2\repository\software\amazon\awssdk\s3\2.21.1\s3-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\aws-xml-protocol\2.21.1\aws-xml-protocol-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\protocol-core\2.21.1\protocol-core-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\arns\2.21.1\arns-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\profiles\2.21.1\profiles-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\crt-core\2.21.1\crt-core-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\http-auth\2.21.1\http-auth-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\http-auth-aws\2.21.1\http-auth-aws-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\checksums-spi\2.21.1\checksums-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\checksums\2.21.1\checksums-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\sdk-core\2.21.1\sdk-core-2.21.1.jar;J:\.m2\repository\org\reactivestreams\reactive-streams\1.0.4\reactive-streams-1.0.4.jar;J:\.m2\repository\software\amazon\awssdk\auth\2.21.1\auth-2.21.1.jar;J:\.m2\repository\software\amazon\eventstream\eventstream\1.0.1\eventstream-1.0.1.jar;J:\.m2\repository\software\amazon\awssdk\http-auth-spi\2.21.1\http-auth-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\identity-spi\2.21.1\identity-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\http-client-spi\2.21.1\http-client-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\regions\2.21.1\regions-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\annotations\2.21.1\annotations-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\utils\2.21.1\utils-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\aws-core\2.21.1\aws-core-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\metrics-spi\2.21.1\metrics-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\json-utils\2.21.1\json-utils-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\third-party-jackson-core\2.21.1\third-party-jackson-core-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\endpoints-spi\2.21.1\endpoints-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\apache-client\2.21.1\apache-client-2.21.1.jar;J:\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;J:\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;J:\.m2\repository\org\apache\httpcomponents\httpcore\4.4.16\httpcore-4.4.16.jar;J:\.m2\repository\commons-codec\commons-codec\1.16.0\commons-codec-1.16.0.jar;J:\.m2\repository\software\amazon\awssdk\netty-nio-client\2.21.1\netty-nio-client-2.21.1.jar;J:\.m2\repository\io\netty\netty-codec-http\4.1.104.Final\netty-codec-http-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-codec-http2\4.1.104.Final\netty-codec-http2-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-codec\4.1.104.Final\netty-codec-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-buffer\4.1.104.Final\netty-buffer-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-transport-classes-epoll\4.1.104.Final\netty-transport-classes-epoll-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-resolver\4.1.104.Final\netty-resolver-4.1.104.Final.jar;J:\.m2\repository\software\amazon\awssdk\rds\2.21.1\rds-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\aws-query-protocol\2.21.1\aws-query-protocol-2.21.1.jar;J:\.m2\repository\io\jsonwebtoken\jjwt-api\0.11.5\jjwt-api-0.11.5.jar;J:\.m2\repository\io\jsonwebtoken\jjwt-impl\0.11.5\jjwt-impl-0.11.5.jar;J:\.m2\repository\io\jsonwebtoken\jjwt-jackson\0.11.5\jjwt-jackson-0.11.5.jar;J:\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.15.3\jackson-databind-2.15.3.jar;J:\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar;J:\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.15.3\jackson-core-2.15.3.jar;J:\.m2\repository\org\projectlombok\lombok\1.18.30\lombok-1.18.30.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-test\3.2.1\spring-boot-starter-test-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-test\3.2.1\spring-boot-test-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-test-autoconfigure\3.2.1\spring-boot-test-autoconfigure-3.2.1.jar;J:\.m2\repository\com\jayway\jsonpath\json-path\2.8.0\json-path-2.8.0.jar;J:\.m2\repository\jakarta\xml\bind\jakarta.xml.bind-api\4.0.1\jakarta.xml.bind-api-4.0.1.jar;J:\.m2\repository\jakarta\activation\jakarta.activation-api\2.1.2\jakarta.activation-api-2.1.2.jar;J:\.m2\repository\net\minidev\json-smart\2.5.0\json-smart-2.5.0.jar;J:\.m2\repository\net\minidev\accessors-smart\2.5.0\accessors-smart-2.5.0.jar;J:\.m2\repository\org\ow2\asm\asm\9.3\asm-9.3.jar;J:\.m2\repository\org\assertj\assertj-core\3.24.2\assertj-core-3.24.2.jar;J:\.m2\repository\org\awaitility\awaitility\4.2.0\awaitility-4.2.0.jar;J:\.m2\repository\org\hamcrest\hamcrest\2.2\hamcrest-2.2.jar;J:\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.1\junit-jupiter-5.10.1.jar;J:\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.1\junit-jupiter-api-5.10.1.jar;J:\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.1\junit-jupiter-params-5.10.1.jar;J:\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.1\junit-jupiter-engine-5.10.1.jar;J:\.m2\repository\org\mockito\mockito-core\5.7.0\mockito-core-5.7.0.jar;J:\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.10\byte-buddy-agent-1.14.10.jar;J:\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;J:\.m2\repository\org\mockito\mockito-junit-jupiter\5.7.0\mockito-junit-jupiter-5.7.0.jar;J:\.m2\repository\org\skyscreamer\jsonassert\1.5.1\jsonassert-1.5.1.jar;J:\.m2\repository\com\vaadin\external\google\android-json\0.0.20131108.vaadin1\android-json-0.0.20131108.vaadin1.jar;J:\.m2\repository\org\springframework\spring-core\6.1.2\spring-core-6.1.2.jar;J:\.m2\repository\org\springframework\spring-jcl\6.1.2\spring-jcl-6.1.2.jar;J:\.m2\repository\org\springframework\spring-test\6.1.2\spring-test-6.1.2.jar;J:\.m2\repository\org\xmlunit\xmlunit-core\2.9.1\xmlunit-core-2.9.1.jar;J:\.m2\repository\org\springframework\security\spring-security-test\6.2.1\spring-security-test-6.2.1.jar;J:\.m2\repository\org\springframework\security\spring-security-core\6.2.1\spring-security-core-6.2.1.jar;J:\.m2\repository\org\springframework\security\spring-security-crypto\6.2.1\spring-security-crypto-6.2.1.jar;J:\.m2\repository\com\h2database\h2\2.2.224\h2-2.2.224.jar;J:\.m2\repository\org\junit\platform\junit-platform-suite\1.10.1\junit-platform-suite-1.10.1.jar;J:\.m2\repository\org\junit\platform\junit-platform-suite-api\1.10.1\junit-platform-suite-api-1.10.1.jar;J:\.m2\repository\org\junit\platform\junit-platform-commons\1.10.1\junit-platform-commons-1.10.1.jar;J:\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;J:\.m2\repository\org\junit\platform\junit-platform-suite-engine\1.10.1\junit-platform-suite-engine-1.10.1.jar;J:\.m2\repository\org\junit\platform\junit-platform-engine\1.10.1\junit-platform-engine-1.10.1.jar;J:\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;J:\.m2\repository\org\junit\platform\junit-platform-suite-commons\1.10.1\junit-platform-suite-commons-1.10.1.jar;J:\.m2\repository\org\junit\platform\junit-platform-launcher\1.10.1\junit-platform-launcher-1.10.1.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.timezone" value="America/Chicago"/>
+    <property name="org.jboss.logging.provider" value="slf4j"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-21\bin"/>
+    <property name="sun.java.command" value="C:\Users\greed\AppData\Local\Temp\surefire5368658469229602622\surefirebooter-20250109083655439_3.jar C:\Users\greed\AppData\Local\Temp\surefire5368658469229602622 2025-01-09T08-36-55_309-jvmRun1 surefire-20250109083655439_1tmp surefire_0-20250109083655439_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="J:\chatgeniusv2-backend\target\test-classes;J:\chatgeniusv2-backend\target\classes;J:\.m2\repository\org\springframework\boot\spring-boot-starter-web\3.2.1\spring-boot-starter-web-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter\3.2.1\spring-boot-starter-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot\3.2.1\spring-boot-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\3.2.1\spring-boot-autoconfigure-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-logging\3.2.1\spring-boot-starter-logging-3.2.1.jar;J:\.m2\repository\ch\qos\logback\logback-classic\1.4.14\logback-classic-1.4.14.jar;J:\.m2\repository\ch\qos\logback\logback-core\1.4.14\logback-core-1.4.14.jar;J:\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.21.1\log4j-to-slf4j-2.21.1.jar;J:\.m2\repository\org\apache\logging\log4j\log4j-api\2.21.1\log4j-api-2.21.1.jar;J:\.m2\repository\org\slf4j\jul-to-slf4j\2.0.9\jul-to-slf4j-2.0.9.jar;J:\.m2\repository\jakarta\annotation\jakarta.annotation-api\2.1.1\jakarta.annotation-api-2.1.1.jar;J:\.m2\repository\org\yaml\snakeyaml\2.2\snakeyaml-2.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-json\3.2.1\spring-boot-starter-json-3.2.1.jar;J:\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jdk8\2.15.3\jackson-datatype-jdk8-2.15.3.jar;J:\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.15.3\jackson-datatype-jsr310-2.15.3.jar;J:\.m2\repository\com\fasterxml\jackson\module\jackson-module-parameter-names\2.15.3\jackson-module-parameter-names-2.15.3.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat\3.2.1\spring-boot-starter-tomcat-3.2.1.jar;J:\.m2\repository\org\apache\tomcat\embed\tomcat-embed-core\10.1.17\tomcat-embed-core-10.1.17.jar;J:\.m2\repository\org\apache\tomcat\embed\tomcat-embed-websocket\10.1.17\tomcat-embed-websocket-10.1.17.jar;J:\.m2\repository\org\springframework\spring-web\6.1.2\spring-web-6.1.2.jar;J:\.m2\repository\org\springframework\spring-beans\6.1.2\spring-beans-6.1.2.jar;J:\.m2\repository\io\micrometer\micrometer-observation\1.12.1\micrometer-observation-1.12.1.jar;J:\.m2\repository\io\micrometer\micrometer-commons\1.12.1\micrometer-commons-1.12.1.jar;J:\.m2\repository\org\springframework\spring-webmvc\6.1.2\spring-webmvc-6.1.2.jar;J:\.m2\repository\org\springframework\spring-context\6.1.2\spring-context-6.1.2.jar;J:\.m2\repository\org\springframework\spring-expression\6.1.2\spring-expression-6.1.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-data-jpa\3.2.1\spring-boot-starter-data-jpa-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-aop\3.2.1\spring-boot-starter-aop-3.2.1.jar;J:\.m2\repository\org\aspectj\aspectjweaver\1.9.21\aspectjweaver-1.9.21.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-jdbc\3.2.1\spring-boot-starter-jdbc-3.2.1.jar;J:\.m2\repository\com\zaxxer\HikariCP\5.0.1\HikariCP-5.0.1.jar;J:\.m2\repository\org\springframework\spring-jdbc\6.1.2\spring-jdbc-6.1.2.jar;J:\.m2\repository\org\hibernate\orm\hibernate-core\6.4.1.Final\hibernate-core-6.4.1.Final.jar;J:\.m2\repository\jakarta\persistence\jakarta.persistence-api\3.1.0\jakarta.persistence-api-3.1.0.jar;J:\.m2\repository\jakarta\transaction\jakarta.transaction-api\2.0.1\jakarta.transaction-api-2.0.1.jar;J:\.m2\repository\org\jboss\logging\jboss-logging\3.5.3.Final\jboss-logging-3.5.3.Final.jar;J:\.m2\repository\org\hibernate\common\hibernate-commons-annotations\6.0.6.Final\hibernate-commons-annotations-6.0.6.Final.jar;J:\.m2\repository\io\smallrye\jandex\3.1.2\jandex-3.1.2.jar;J:\.m2\repository\com\fasterxml\classmate\1.6.0\classmate-1.6.0.jar;J:\.m2\repository\net\bytebuddy\byte-buddy\1.14.10\byte-buddy-1.14.10.jar;J:\.m2\repository\org\glassfish\jaxb\jaxb-runtime\4.0.4\jaxb-runtime-4.0.4.jar;J:\.m2\repository\org\glassfish\jaxb\jaxb-core\4.0.4\jaxb-core-4.0.4.jar;J:\.m2\repository\org\eclipse\angus\angus-activation\2.0.1\angus-activation-2.0.1.jar;J:\.m2\repository\org\glassfish\jaxb\txw2\4.0.4\txw2-4.0.4.jar;J:\.m2\repository\com\sun\istack\istack-commons-runtime\4.1.2\istack-commons-runtime-4.1.2.jar;J:\.m2\repository\jakarta\inject\jakarta.inject-api\2.0.1\jakarta.inject-api-2.0.1.jar;J:\.m2\repository\org\antlr\antlr4-runtime\4.13.0\antlr4-runtime-4.13.0.jar;J:\.m2\repository\org\springframework\data\spring-data-jpa\3.2.1\spring-data-jpa-3.2.1.jar;J:\.m2\repository\org\springframework\data\spring-data-commons\3.2.1\spring-data-commons-3.2.1.jar;J:\.m2\repository\org\springframework\spring-orm\6.1.2\spring-orm-6.1.2.jar;J:\.m2\repository\org\springframework\spring-tx\6.1.2\spring-tx-6.1.2.jar;J:\.m2\repository\org\slf4j\slf4j-api\2.0.9\slf4j-api-2.0.9.jar;J:\.m2\repository\org\springframework\spring-aspects\6.1.2\spring-aspects-6.1.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-security\3.2.1\spring-boot-starter-security-3.2.1.jar;J:\.m2\repository\org\springframework\spring-aop\6.1.2\spring-aop-6.1.2.jar;J:\.m2\repository\org\springframework\security\spring-security-config\6.2.1\spring-security-config-6.2.1.jar;J:\.m2\repository\org\springframework\security\spring-security-web\6.2.1\spring-security-web-6.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-validation\3.2.1\spring-boot-starter-validation-3.2.1.jar;J:\.m2\repository\org\apache\tomcat\embed\tomcat-embed-el\10.1.17\tomcat-embed-el-10.1.17.jar;J:\.m2\repository\org\hibernate\validator\hibernate-validator\8.0.1.Final\hibernate-validator-8.0.1.Final.jar;J:\.m2\repository\jakarta\validation\jakarta.validation-api\3.0.2\jakarta.validation-api-3.0.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-websocket\3.2.1\spring-boot-starter-websocket-3.2.1.jar;J:\.m2\repository\org\springframework\spring-messaging\6.1.2\spring-messaging-6.1.2.jar;J:\.m2\repository\org\springframework\spring-websocket\6.1.2\spring-websocket-6.1.2.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-data-redis\3.2.1\spring-boot-starter-data-redis-3.2.1.jar;J:\.m2\repository\io\lettuce\lettuce-core\6.3.0.RELEASE\lettuce-core-6.3.0.RELEASE.jar;J:\.m2\repository\io\netty\netty-common\4.1.104.Final\netty-common-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-handler\4.1.104.Final\netty-handler-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-transport-native-unix-common\4.1.104.Final\netty-transport-native-unix-common-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-transport\4.1.104.Final\netty-transport-4.1.104.Final.jar;J:\.m2\repository\io\projectreactor\reactor-core\3.6.1\reactor-core-3.6.1.jar;J:\.m2\repository\org\springframework\data\spring-data-redis\3.2.1\spring-data-redis-3.2.1.jar;J:\.m2\repository\org\springframework\data\spring-data-keyvalue\3.2.1\spring-data-keyvalue-3.2.1.jar;J:\.m2\repository\org\springframework\spring-oxm\6.1.2\spring-oxm-6.1.2.jar;J:\.m2\repository\org\springframework\spring-context-support\6.1.2\spring-context-support-6.1.2.jar;J:\.m2\repository\org\postgresql\postgresql\42.6.0\postgresql-42.6.0.jar;J:\.m2\repository\org\checkerframework\checker-qual\3.31.0\checker-qual-3.31.0.jar;J:\.m2\repository\software\amazon\awssdk\s3\2.21.1\s3-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\aws-xml-protocol\2.21.1\aws-xml-protocol-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\protocol-core\2.21.1\protocol-core-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\arns\2.21.1\arns-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\profiles\2.21.1\profiles-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\crt-core\2.21.1\crt-core-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\http-auth\2.21.1\http-auth-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\http-auth-aws\2.21.1\http-auth-aws-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\checksums-spi\2.21.1\checksums-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\checksums\2.21.1\checksums-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\sdk-core\2.21.1\sdk-core-2.21.1.jar;J:\.m2\repository\org\reactivestreams\reactive-streams\1.0.4\reactive-streams-1.0.4.jar;J:\.m2\repository\software\amazon\awssdk\auth\2.21.1\auth-2.21.1.jar;J:\.m2\repository\software\amazon\eventstream\eventstream\1.0.1\eventstream-1.0.1.jar;J:\.m2\repository\software\amazon\awssdk\http-auth-spi\2.21.1\http-auth-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\identity-spi\2.21.1\identity-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\http-client-spi\2.21.1\http-client-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\regions\2.21.1\regions-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\annotations\2.21.1\annotations-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\utils\2.21.1\utils-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\aws-core\2.21.1\aws-core-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\metrics-spi\2.21.1\metrics-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\json-utils\2.21.1\json-utils-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\third-party-jackson-core\2.21.1\third-party-jackson-core-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\endpoints-spi\2.21.1\endpoints-spi-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\apache-client\2.21.1\apache-client-2.21.1.jar;J:\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;J:\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;J:\.m2\repository\org\apache\httpcomponents\httpcore\4.4.16\httpcore-4.4.16.jar;J:\.m2\repository\commons-codec\commons-codec\1.16.0\commons-codec-1.16.0.jar;J:\.m2\repository\software\amazon\awssdk\netty-nio-client\2.21.1\netty-nio-client-2.21.1.jar;J:\.m2\repository\io\netty\netty-codec-http\4.1.104.Final\netty-codec-http-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-codec-http2\4.1.104.Final\netty-codec-http2-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-codec\4.1.104.Final\netty-codec-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-buffer\4.1.104.Final\netty-buffer-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-transport-classes-epoll\4.1.104.Final\netty-transport-classes-epoll-4.1.104.Final.jar;J:\.m2\repository\io\netty\netty-resolver\4.1.104.Final\netty-resolver-4.1.104.Final.jar;J:\.m2\repository\software\amazon\awssdk\rds\2.21.1\rds-2.21.1.jar;J:\.m2\repository\software\amazon\awssdk\aws-query-protocol\2.21.1\aws-query-protocol-2.21.1.jar;J:\.m2\repository\io\jsonwebtoken\jjwt-api\0.11.5\jjwt-api-0.11.5.jar;J:\.m2\repository\io\jsonwebtoken\jjwt-impl\0.11.5\jjwt-impl-0.11.5.jar;J:\.m2\repository\io\jsonwebtoken\jjwt-jackson\0.11.5\jjwt-jackson-0.11.5.jar;J:\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.15.3\jackson-databind-2.15.3.jar;J:\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar;J:\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.15.3\jackson-core-2.15.3.jar;J:\.m2\repository\org\projectlombok\lombok\1.18.30\lombok-1.18.30.jar;J:\.m2\repository\org\springframework\boot\spring-boot-starter-test\3.2.1\spring-boot-starter-test-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-test\3.2.1\spring-boot-test-3.2.1.jar;J:\.m2\repository\org\springframework\boot\spring-boot-test-autoconfigure\3.2.1\spring-boot-test-autoconfigure-3.2.1.jar;J:\.m2\repository\com\jayway\jsonpath\json-path\2.8.0\json-path-2.8.0.jar;J:\.m2\repository\jakarta\xml\bind\jakarta.xml.bind-api\4.0.1\jakarta.xml.bind-api-4.0.1.jar;J:\.m2\repository\jakarta\activation\jakarta.activation-api\2.1.2\jakarta.activation-api-2.1.2.jar;J:\.m2\repository\net\minidev\json-smart\2.5.0\json-smart-2.5.0.jar;J:\.m2\repository\net\minidev\accessors-smart\2.5.0\accessors-smart-2.5.0.jar;J:\.m2\repository\org\ow2\asm\asm\9.3\asm-9.3.jar;J:\.m2\repository\org\assertj\assertj-core\3.24.2\assertj-core-3.24.2.jar;J:\.m2\repository\org\awaitility\awaitility\4.2.0\awaitility-4.2.0.jar;J:\.m2\repository\org\hamcrest\hamcrest\2.2\hamcrest-2.2.jar;J:\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.1\junit-jupiter-5.10.1.jar;J:\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.1\junit-jupiter-api-5.10.1.jar;J:\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.1\junit-jupiter-params-5.10.1.jar;J:\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.1\junit-jupiter-engine-5.10.1.jar;J:\.m2\repository\org\mockito\mockito-core\5.7.0\mockito-core-5.7.0.jar;J:\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.10\byte-buddy-agent-1.14.10.jar;J:\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;J:\.m2\repository\org\mockito\mockito-junit-jupiter\5.7.0\mockito-junit-jupiter-5.7.0.jar;J:\.m2\repository\org\skyscreamer\jsonassert\1.5.1\jsonassert-1.5.1.jar;J:\.m2\repository\com\vaadin\external\google\android-json\0.0.20131108.vaadin1\android-json-0.0.20131108.vaadin1.jar;J:\.m2\repository\org\springframework\spring-core\6.1.2\spring-core-6.1.2.jar;J:\.m2\repository\org\springframework\spring-jcl\6.1.2\spring-jcl-6.1.2.jar;J:\.m2\repository\org\springframework\spring-test\6.1.2\spring-test-6.1.2.jar;J:\.m2\repository\org\xmlunit\xmlunit-core\2.9.1\xmlunit-core-2.9.1.jar;J:\.m2\repository\org\springframework\security\spring-security-test\6.2.1\spring-security-test-6.2.1.jar;J:\.m2\repository\org\springframework\security\spring-security-core\6.2.1\spring-security-core-6.2.1.jar;J:\.m2\repository\org\springframework\security\spring-security-crypto\6.2.1\spring-security-crypto-6.2.1.jar;J:\.m2\repository\com\h2database\h2\2.2.224\h2-2.2.224.jar;J:\.m2\repository\org\junit\platform\junit-platform-suite\1.10.1\junit-platform-suite-1.10.1.jar;J:\.m2\repository\org\junit\platform\junit-platform-suite-api\1.10.1\junit-platform-suite-api-1.10.1.jar;J:\.m2\repository\org\junit\platform\junit-platform-commons\1.10.1\junit-platform-commons-1.10.1.jar;J:\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;J:\.m2\repository\org\junit\platform\junit-platform-suite-engine\1.10.1\junit-platform-suite-engine-1.10.1.jar;J:\.m2\repository\org\junit\platform\junit-platform-engine\1.10.1\junit-platform-engine-1.10.1.jar;J:\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;J:\.m2\repository\org\junit\platform\junit-platform-suite-commons\1.10.1\junit-platform-suite-commons-1.10.1.jar;J:\.m2\repository\org\junit\platform\junit-platform-launcher\1.10.1\junit-platform-launcher-1.10.1.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\greed"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2023-10-17"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk-21"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="J:\chatgeniusv2-backend"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="FILE_LOG_CHARSET" value="UTF-8"/>
+    <property name="java.awt.headless" value="true"/>
+    <property name="surefire.real.class.path" value="C:\Users\greed\AppData\Local\Temp\surefire5368658469229602622\surefirebooter-20250109083655439_3.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.1+12-LTS-29"/>
+    <property name="user.name" value="greed"/>
+    <property name="stdout.encoding" value="Cp1252"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="J:\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\greed\AppData\Local\Temp\"/>
+    <property name="com.zaxxer.hikari.pool_number" value="4"/>
+    <property name="java.version" value="21.0.1"/>
+    <property name="user.dir" value="J:\chatgeniusv2-backend"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="PID" value="20036"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
+    <property name="native.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk-21\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Python312\Scripts\;C:\Python312\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files\Microsoft\jdk-11.0.12.7-hotspot\bin;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;H:\Programs\PuTTy\;H:\Programs\WinSCP\;C:\Program Files\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;H:\Downloads\apache-maven-3.9.8-bin\apache-maven-3.9.8\bin;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;c:\Users\greed\AppData\Local\Programs\cursor\resources\app\bin;C:\Users\greed\scoop\shims;C:\Users\greed\AppData\Local\Microsoft\WindowsApps;C:\Users\greed\.dotnet\tools;H:\Programs\Microsoft VS Code\bin;;H:\Programs\IntelliJ\IntelliJ IDEA Community Edition 2024.1.4\bin;;C:\Users\greed\AppData\Roaming\npm;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="Cp1252"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="21.0.1+12-LTS-29"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="createChannel_Success" classname="com.chatgenius.repository.ChannelRepositoryTest" time="0.005">
+    <system-out><![CDATA[2025-01-09T08:37:05.120-06:00 DEBUG 20036 --- [           main] b.t.a.o.j.DataJpaTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [ChannelRepositoryTest]: using SpringBootContextLoader
+2025-01-09T08:37:05.120-06:00 DEBUG 20036 --- [           main] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.chatgenius.repository.ChannelRepositoryTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+2025-01-09T08:37:05.120-06:00  INFO 20036 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.chatgenius.repository.ChannelRepositoryTest]: ChannelRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-01-09T08:37:05.120-06:00 DEBUG 20036 --- [           main] b.t.a.o.j.DataJpaTestContextBootstrapper : Using ContextCustomizerFactory implementations for test class [ChannelRepositoryTest]: [ImportsContextCustomizerFactory, ExcludeFilterContextCustomizerFactory, HttpGraphQlTesterContextCustomizerFactory, DuplicateJsonObjectContextCustomizerFactory, MockitoContextCustomizerFactory, TestRestTemplateContextCustomizerFactory, WebTestClientContextCustomizerFactory, OverrideAutoConfigurationContextCustomizerFactory, ObservabilityContextCustomizerFactory, TypeExcludeFiltersContextCustomizerFactory, PropertyMappingContextCustomizerFactory, WebDriverContextCustomizerFactory, MockServerContainerContextCustomizerFactory, DynamicPropertiesContextCustomizerFactory]
+2025-01-09T08:37:05.122-06:00 DEBUG 20036 --- [           main] b.t.a.o.j.DataJpaTestContextBootstrapper : Using ContextCustomizers for test class [ChannelRepositoryTest]: [ImportsContextCustomizer, ExcludeFilterContextCustomizer, DuplicateJsonObjectContextCustomizer, MockitoContextCustomizer, DisableAutoConfigurationContextCustomizer, DisableObservabilityContextCustomizer, TypeExcludeFiltersContextCustomizer, PropertyMappingContextCustomizer, WebDriverContextCustomizer]
+2025-01-09T08:37:05.126-06:00 DEBUG 20036 --- [           main] ssPathScanningCandidateComponentProvider : Identified candidate component class: file [J:\chatgeniusv2-backend\target\classes\com\chatgenius\ChatGeniusApplication.class]
+2025-01-09T08:37:05.126-06:00  INFO 20036 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.chatgenius.ChatGeniusApplication for test class com.chatgenius.repository.ChannelRepositoryTest
+2025-01-09T08:37:05.126-06:00 DEBUG 20036 --- [           main] .s.t.c.u.TestContextSpringFactoriesUtils : Skipping candidate TestExecutionListener [org.springframework.test.context.observation.MicrometerObservationRegistryTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: io.micrometer.context.ThreadLocalAccessor. MicrometerObservationRegistryTestExecutionListener requires io.micrometer:micrometer-observation:1.10.8 or higher and io.micrometer:context-propagation:1.0.3 or higher.
+2025-01-09T08:37:05.126-06:00 DEBUG 20036 --- [           main] b.t.a.o.j.DataJpaTestContextBootstrapper : Using TestExecutionListeners for test class [ChannelRepositoryTest]: [ServletTestExecutionListener, DirtiesContextBeforeModesTestExecutionListener, ApplicationEventsTestExecutionListener, MockitoTestExecutionListener, DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener, TransactionalTestExecutionListener, SqlScriptsTestExecutionListener, EventPublishingTestExecutionListener, WithSecurityContextTestExecutionListener, ReactorContextTestExecutionListener, ResetMocksTestExecutionListener, RestDocsTestExecutionListener, MockRestServiceServerResetTestExecutionListener, MockMvcPrintOnlyOnFailureTestExecutionListener, WebDriverTestExecutionListener, MockWebServiceServerTestExecutionListener]
+2025-01-09T08:37:05.126-06:00 DEBUG 20036 --- [           main] sContextBeforeModesTestExecutionListener : Before test class: class [ChannelRepositoryTest], class annotated with @DirtiesContext [false] with mode [null]
+2025-01-09T08:37:05.127-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 152, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.127-06:00 DEBUG 20036 --- [           main] DependencyInjectionTestExecutionListener : Performing dependency injection for test class com.chatgenius.repository.ChannelRepositoryTest
+2025-01-09T08:37:05.127-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 153, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.127-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 154, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.127-06:00 DEBUG 20036 --- [           main] sContextBeforeModesTestExecutionListener : Before test method: class [ChannelRepositoryTest], method [createChannel_Success], class annotated with @DirtiesContext [false] with mode [null], method annotated with @DirtiesContext [false] with mode [null]
+2025-01-09T08:37:05.127-06:00 DEBUG 20036 --- [           main] t.c.t.TransactionalTestExecutionListener : Explicit transaction definition [PROPAGATION_REQUIRED,ISOLATION_DEFAULT] found for test class [com.chatgenius.repository.ChannelRepositoryTest] and test method [createChannel_Success]
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 155, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] t.c.t.TransactionalTestExecutionListener : No method-level @Rollback override: using default rollback [true] for test method [void com.chatgenius.repository.ChannelRepositoryTest.createChannel_Success()]
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Creating new transaction with name [com.chatgenius.repository.ChannelRepositoryTest.createChannel_Success]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Opened new EntityManager [SessionImpl(1643542604<open>)] for JPA transaction
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] o.h.e.t.internal.TransactionImpl         : On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] o.h.e.t.internal.TransactionImpl         : begin
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] o.s.j.datasource.SimpleDriverDataSource  : Creating new JDBC Driver Connection to [jdbc:h2:mem:c28bcf25-0d96-40ed-b42d-6242cefd62bf;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false]
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@2241cafe]
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] o.s.t.c.transaction.TransactionContext   : Began transaction (1) for test class [com.chatgenius.repository.ChannelRepositoryTest]; test method [createChannel_Success]; transaction manager [org.springframework.orm.jpa.JpaTransactionManager@6af5b172]; rollback [true]
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 156, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 157, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1643542604<open>)] for JPA transaction
+2025-01-09T08:37:05.128-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Participating in existing transaction
+2025-01-09T08:37:05.129-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Created new SQL alias : c1_0
+2025-01-09T08:37:05.129-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Registration of TableGroup [StandardTableGroup(com.chatgenius.model.Channel(1604810258100))] with identifierForTableGroup [com.chatgenius.model.Channel] for NavigablePath [com.chatgenius.model.Channel] 
+2025-01-09T08:37:05.129-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results.graph.AST      : DomainResult Graph:
+ \-EntityResultImpl [com.chatgenius.model.Channel(1604810258100)]
+ |  +-BasicFetch [com.chatgenius.model.Channel(1604810258100).createdAt]
+ |  +-DelayedCollectionFetch [com.chatgenius.model.Channel(1604810258100).members]
+ |  +-BasicFetch [com.chatgenius.model.Channel(1604810258100).name]
+ |  \-BasicFetch [com.chatgenius.model.Channel(1604810258100).type]
+
+2025-01-09T08:37:05.129-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.tree           : SQL AST Tree:
+    SelectStatement {
+      FromClause {
+        StandardTableGroup (c1 : com.chatgenius.model.Channel(1604810258100)) {
+          primaryTableReference : channels as c1_0
+        }
+      }
+    }
+
+2025-01-09T08:37:05.129-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.exec               : Skipping reading Query result cache data: cache-enabled = false, cache-mode = NORMAL
+2025-01-09T08:37:05.129-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results                : Initializer list:
+	  com.chatgenius.model.Channel(1604810258100).members -> DelayedCollectionInitializer(com.chatgenius.model.Channel(1604810258100).members)@495348201 (PluralAttribute(com.chatgenius.model.Channel.members))
+	  com.chatgenius.model.Channel(1604810258100) -> EntityResultInitializer(com.chatgenius.model.Channel(1604810258100))@87144317 (SingleTableEntityPersister(com.chatgenius.model.Channel))
+
+2025-01-09T08:37:05.129-06:00 DEBUG 20036 --- [           main] org.hibernate.SQL                        : 
+    select
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.name,
+        c1_0.type 
+    from
+        channels c1_0
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.name,
+        c1_0.type 
+    from
+        channels c1_0
+2025-01-09T08:37:05.130-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1643542604<open>)] for JPA transaction
+2025-01-09T08:37:05.130-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Participating in existing transaction
+2025-01-09T08:37:05.130-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Created new SQL alias : u1_0
+2025-01-09T08:37:05.130-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Registration of TableGroup [StandardTableGroup(com.chatgenius.model.User(1604811722700))] with identifierForTableGroup [com.chatgenius.model.User] for NavigablePath [com.chatgenius.model.User] 
+2025-01-09T08:37:05.130-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results.graph.AST      : DomainResult Graph:
+ \-EntityResultImpl [com.chatgenius.model.User(1604811722700)]
+ |  +-BasicFetch [com.chatgenius.model.User(1604811722700).createdAt]
+ |  +-BasicFetch [com.chatgenius.model.User(1604811722700).email]
+ |  +-BasicFetch [com.chatgenius.model.User(1604811722700).lastSeenAt]
+ |  +-BasicFetch [com.chatgenius.model.User(1604811722700).password]
+ |  +-BasicFetch [com.chatgenius.model.User(1604811722700).status]
+ |  \-BasicFetch [com.chatgenius.model.User(1604811722700).username]
+
+2025-01-09T08:37:05.130-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.tree           : SQL AST Tree:
+    SelectStatement {
+      FromClause {
+        StandardTableGroup (u1 : com.chatgenius.model.User(1604811722700)) {
+          primaryTableReference : users as u1_0
+        }
+      }
+    }
+
+2025-01-09T08:37:05.130-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.exec               : Skipping reading Query result cache data: cache-enabled = false, cache-mode = NORMAL
+2025-01-09T08:37:05.130-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results                : Initializer list:
+	  com.chatgenius.model.User(1604811722700) -> EntityResultInitializer(com.chatgenius.model.User(1604811722700))@350419467 (SingleTableEntityPersister(com.chatgenius.model.User))
+
+2025-01-09T08:37:05.130-06:00 DEBUG 20036 --- [           main] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.last_seen_at,
+        u1_0.password,
+        u1_0.status,
+        u1_0.username 
+    from
+        users u1_0
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.last_seen_at,
+        u1_0.password,
+        u1_0.status,
+        u1_0.username 
+    from
+        users u1_0
+2025-01-09T08:37:05.131-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 158, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.131-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1643542604<open>)] for JPA transaction
+2025-01-09T08:37:05.131-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Participating in existing transaction
+2025-01-09T08:37:05.131-06:00 DEBUG 20036 --- [           main] o.h.j.internal.PersistenceUnitUtilImpl   : jakarta.persistence.PersistenceUnitUtil.getIdentifier is only intended to work with enhanced entities (although Hibernate also adapts this support to its proxies); however the passed entity was not enhanced (nor a proxy).. may not be able to read identifier
+2025-01-09T08:37:05.131-06:00 DEBUG 20036 --- [           main] o.h.e.i.AbstractSaveEventListener        : Generated identifier: 89a3fd72-6898-4f3e-ab20-05530dcf629b, using strategy: org.hibernate.id.UUIDGenerator
+2025-01-09T08:37:05.131-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 159, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.131-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 160, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.131-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 161, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 162, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 163, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 164, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 165, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Initiating transaction rollback
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Rolling back JPA transaction on EntityManager [SessionImpl(1643542604<open>)]
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] o.h.e.t.internal.TransactionImpl         : rolling back
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Closing JPA EntityManager [SessionImpl(1643542604<open>)] after transaction
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] o.s.t.c.transaction.TransactionContext   : Rolled back transaction (1) for test class [com.chatgenius.repository.ChannelRepositoryTest]; test method [createChannel_Success]
+2025-01-09T08:37:05.132-06:00 DEBUG 20036 --- [           main] .c.s.DirtiesContextTestExecutionListener : After test method: class [ChannelRepositoryTest], method [createChannel_Success], class annotated with @DirtiesContext [false] with mode [null], method annotated with @DirtiesContext [false] with mode [null]
+]]></system-out>
+  </testcase>
+  <testcase name="findByType_Success" classname="com.chatgenius.repository.ChannelRepositoryTest" time="0.119">
+    <system-out><![CDATA[2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] DependencyInjectionTestExecutionListener : Performing dependency injection for test class com.chatgenius.repository.ChannelRepositoryTest
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 166, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 167, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] sContextBeforeModesTestExecutionListener : Before test method: class [ChannelRepositoryTest], method [findByType_Success], class annotated with @DirtiesContext [false] with mode [null], method annotated with @DirtiesContext [false] with mode [null]
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] t.c.t.TransactionalTestExecutionListener : Explicit transaction definition [PROPAGATION_REQUIRED,ISOLATION_DEFAULT] found for test class [com.chatgenius.repository.ChannelRepositoryTest] and test method [findByType_Success]
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 168, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] t.c.t.TransactionalTestExecutionListener : No method-level @Rollback override: using default rollback [true] for test method [void com.chatgenius.repository.ChannelRepositoryTest.findByType_Success()]
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Creating new transaction with name [com.chatgenius.repository.ChannelRepositoryTest.findByType_Success]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Opened new EntityManager [SessionImpl(1001304973<open>)] for JPA transaction
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] o.h.e.t.internal.TransactionImpl         : On TransactionImpl creation, JpaCompliance#isJpaTransactionComplianceEnabled == false
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] o.h.e.t.internal.TransactionImpl         : begin
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] o.s.j.datasource.SimpleDriverDataSource  : Creating new JDBC Driver Connection to [jdbc:h2:mem:c28bcf25-0d96-40ed-b42d-6242cefd62bf;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false]
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@2937d3e]
+2025-01-09T08:37:05.133-06:00 DEBUG 20036 --- [           main] o.s.t.c.transaction.TransactionContext   : Began transaction (1) for test class [com.chatgenius.repository.ChannelRepositoryTest]; test method [findByType_Success]; transaction manager [org.springframework.orm.jpa.JpaTransactionManager@6af5b172]; rollback [true]
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 169, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 170, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1001304973<open>)] for JPA transaction
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Participating in existing transaction
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Created new SQL alias : c1_0
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Registration of TableGroup [StandardTableGroup(com.chatgenius.model.Channel(1604815544100))] with identifierForTableGroup [com.chatgenius.model.Channel] for NavigablePath [com.chatgenius.model.Channel] 
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results.graph.AST      : DomainResult Graph:
+ \-EntityResultImpl [com.chatgenius.model.Channel(1604815544100)]
+ |  +-BasicFetch [com.chatgenius.model.Channel(1604815544100).createdAt]
+ |  +-DelayedCollectionFetch [com.chatgenius.model.Channel(1604815544100).members]
+ |  +-BasicFetch [com.chatgenius.model.Channel(1604815544100).name]
+ |  \-BasicFetch [com.chatgenius.model.Channel(1604815544100).type]
+
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.tree           : SQL AST Tree:
+    SelectStatement {
+      FromClause {
+        StandardTableGroup (c1 : com.chatgenius.model.Channel(1604815544100)) {
+          primaryTableReference : channels as c1_0
+        }
+      }
+    }
+
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.exec               : Skipping reading Query result cache data: cache-enabled = false, cache-mode = NORMAL
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results                : Initializer list:
+	  com.chatgenius.model.Channel(1604815544100).members -> DelayedCollectionInitializer(com.chatgenius.model.Channel(1604815544100).members)@1498104287 (PluralAttribute(com.chatgenius.model.Channel.members))
+	  com.chatgenius.model.Channel(1604815544100) -> EntityResultInitializer(com.chatgenius.model.Channel(1604815544100))@1992806945 (SingleTableEntityPersister(com.chatgenius.model.Channel))
+
+2025-01-09T08:37:05.134-06:00 DEBUG 20036 --- [           main] org.hibernate.SQL                        : 
+    select
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.name,
+        c1_0.type 
+    from
+        channels c1_0
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.name,
+        c1_0.type 
+    from
+        channels c1_0
+2025-01-09T08:37:05.135-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1001304973<open>)] for JPA transaction
+2025-01-09T08:37:05.135-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Participating in existing transaction
+2025-01-09T08:37:05.135-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Created new SQL alias : u1_0
+2025-01-09T08:37:05.135-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Registration of TableGroup [StandardTableGroup(com.chatgenius.model.User(1604816783300))] with identifierForTableGroup [com.chatgenius.model.User] for NavigablePath [com.chatgenius.model.User] 
+2025-01-09T08:37:05.135-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results.graph.AST      : DomainResult Graph:
+ \-EntityResultImpl [com.chatgenius.model.User(1604816783300)]
+ |  +-BasicFetch [com.chatgenius.model.User(1604816783300).createdAt]
+ |  +-BasicFetch [com.chatgenius.model.User(1604816783300).email]
+ |  +-BasicFetch [com.chatgenius.model.User(1604816783300).lastSeenAt]
+ |  +-BasicFetch [com.chatgenius.model.User(1604816783300).password]
+ |  +-BasicFetch [com.chatgenius.model.User(1604816783300).status]
+ |  \-BasicFetch [com.chatgenius.model.User(1604816783300).username]
+
+2025-01-09T08:37:05.135-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.tree           : SQL AST Tree:
+    SelectStatement {
+      FromClause {
+        StandardTableGroup (u1 : com.chatgenius.model.User(1604816783300)) {
+          primaryTableReference : users as u1_0
+        }
+      }
+    }
+
+2025-01-09T08:37:05.135-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.exec               : Skipping reading Query result cache data: cache-enabled = false, cache-mode = NORMAL
+2025-01-09T08:37:05.135-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results                : Initializer list:
+	  com.chatgenius.model.User(1604816783300) -> EntityResultInitializer(com.chatgenius.model.User(1604816783300))@120050970 (SingleTableEntityPersister(com.chatgenius.model.User))
+
+2025-01-09T08:37:05.135-06:00 DEBUG 20036 --- [           main] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.last_seen_at,
+        u1_0.password,
+        u1_0.status,
+        u1_0.username 
+    from
+        users u1_0
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.last_seen_at,
+        u1_0.password,
+        u1_0.status,
+        u1_0.username 
+    from
+        users u1_0
+2025-01-09T08:37:05.136-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 171, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.136-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1001304973<open>)] for JPA transaction
+2025-01-09T08:37:05.136-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Participating in existing transaction
+2025-01-09T08:37:05.136-06:00 DEBUG 20036 --- [           main] o.h.j.internal.PersistenceUnitUtilImpl   : jakarta.persistence.PersistenceUnitUtil.getIdentifier is only intended to work with enhanced entities (although Hibernate also adapts this support to its proxies); however the passed entity was not enhanced (nor a proxy).. may not be able to read identifier
+2025-01-09T08:37:05.136-06:00 DEBUG 20036 --- [           main] o.h.e.i.AbstractSaveEventListener        : Generated identifier: 675320a2-5bdf-49b0-91b3-ace54cdc8cc5, using strategy: org.hibernate.id.UUIDGenerator
+2025-01-09T08:37:05.136-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1001304973<open>)] for JPA transaction
+2025-01-09T08:37:05.136-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Participating in existing transaction
+2025-01-09T08:37:05.136-06:00 DEBUG 20036 --- [           main] o.h.j.internal.PersistenceUnitUtilImpl   : jakarta.persistence.PersistenceUnitUtil.getIdentifier is only intended to work with enhanced entities (although Hibernate also adapts this support to its proxies); however the passed entity was not enhanced (nor a proxy).. may not be able to read identifier
+2025-01-09T08:37:05.136-06:00 DEBUG 20036 --- [           main] o.h.e.i.AbstractSaveEventListener        : Generated identifier: a6ce6d4e-8df6-4f99-bfb9-778adf97c0eb, using strategy: org.hibernate.id.UUIDGenerator
+2025-01-09T08:37:05.156-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Created new SQL alias : c1_0
+2025-01-09T08:37:05.156-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.create         : Registration of TableGroup [StandardTableGroup(com.chatgenius.model.Channel(1604283759200))] with identifierForTableGroup [com.chatgenius.model.Channel] for NavigablePath [com.chatgenius.model.Channel] 
+2025-01-09T08:37:05.164-06:00 DEBUG 20036 --- [           main] o.h.q.sqm.sql.BaseSqmToSqlAstConverter   : Determining mapping-model type for SqmParameter : org.hibernate.query.sqm.tree.expression.SqmJpaCriteriaParameterWrapper@f9a7f2
+2025-01-09T08:37:05.164-06:00 DEBUG 20036 --- [           main] o.h.q.sqm.sql.BaseSqmToSqlAstConverter   : Determining mapping-model type for SqmPath : SqmBasicValuedSimplePath(com.chatgenius.model.Channel(1604283759200).type) 
+2025-01-09T08:37:05.172-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results.graph.AST      : DomainResult Graph:
+ \-EntityResultImpl [com.chatgenius.model.Channel(1604283759200)]
+ |  +-BasicFetch [com.chatgenius.model.Channel(1604283759200).createdAt]
+ |  +-DelayedCollectionFetch [com.chatgenius.model.Channel(1604283759200).members]
+ |  +-BasicFetch [com.chatgenius.model.Channel(1604283759200).name]
+ |  \-BasicFetch [com.chatgenius.model.Channel(1604283759200).type]
+
+2025-01-09T08:37:05.172-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.ast.tree           : SQL AST Tree:
+    SelectStatement {
+      FromClause {
+        StandardTableGroup (c1 : com.chatgenius.model.Channel(1604283759200)) {
+          primaryTableReference : channels as c1_0
+        }
+      }
+    }
+
+2025-01-09T08:37:05.175-06:00 DEBUG 20036 --- [           main] o.h.e.i.AbstractFlushingEventListener    : Processing flush-time cascades
+2025-01-09T08:37:05.176-06:00 DEBUG 20036 --- [           main] o.h.e.i.AbstractFlushingEventListener    : Dirty checking collections
+2025-01-09T08:37:05.185-06:00 DEBUG 20036 --- [           main] o.hibernate.engine.internal.Collections  : Collection found: [com.chatgenius.model.Channel.members#675320a2-5bdf-49b0-91b3-ace54cdc8cc5], was: [<unreferenced>] (initialized)
+2025-01-09T08:37:05.185-06:00 DEBUG 20036 --- [           main] o.hibernate.engine.internal.Collections  : Collection found: [com.chatgenius.model.Channel.members#a6ce6d4e-8df6-4f99-bfb9-778adf97c0eb], was: [<unreferenced>] (initialized)
+2025-01-09T08:37:05.192-06:00 DEBUG 20036 --- [           main] o.h.e.i.AbstractFlushingEventListener    : Flushed: 2 insertions, 0 updates, 0 deletions to 2 objects
+2025-01-09T08:37:05.192-06:00 DEBUG 20036 --- [           main] o.h.e.i.AbstractFlushingEventListener    : Flushed: 2 (re)creations, 0 updates, 0 removals to 2 collections
+2025-01-09T08:37:05.195-06:00 DEBUG 20036 --- [           main] o.hibernate.internal.util.EntityPrinter  : Listing entities:
+2025-01-09T08:37:05.196-06:00 DEBUG 20036 --- [           main] o.hibernate.internal.util.EntityPrinter  : com.chatgenius.model.Channel{createdAt=2025-01-09T08:37:05.136616600-06:00[America/Chicago], members=[], name=private-channel, id=a6ce6d4e-8df6-4f99-bfb9-778adf97c0eb, type=PRIVATE}
+2025-01-09T08:37:05.196-06:00 DEBUG 20036 --- [           main] o.hibernate.internal.util.EntityPrinter  : com.chatgenius.model.Channel{createdAt=2025-01-09T08:37:05.136616600-06:00[America/Chicago], members=[], name=public-channel, id=675320a2-5bdf-49b0-91b3-ace54cdc8cc5, type=PUBLIC}
+2025-01-09T08:37:05.196-06:00 DEBUG 20036 --- [           main] org.hibernate.engine.spi.ActionQueue     : Changes must be flushed to space: channels
+2025-01-09T08:37:05.214-06:00 DEBUG 20036 --- [           main] org.hibernate.SQL                        : 
+    insert 
+    into
+        channels
+        (created_at, name, type, id) 
+    values
+        (?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        channels
+        (created_at, name, type, id) 
+    values
+        (?, ?, ?, ?)
+2025-01-09T08:37:05.233-06:00 DEBUG 20036 --- [           main] org.hibernate.SQL                        : 
+    insert 
+    into
+        channels
+        (created_at, name, type, id) 
+    values
+        (?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        channels
+        (created_at, name, type, id) 
+    values
+        (?, ?, ?, ?)
+2025-01-09T08:37:05.235-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.jdbc.mutation          : Inserting collection rows - com.chatgenius.model.Channel.members : 675320a2-5bdf-49b0-91b3-ace54cdc8cc5
+2025-01-09T08:37:05.235-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.jdbc.mutation          : No collection rows to insert - com.chatgenius.model.Channel.members : 675320a2-5bdf-49b0-91b3-ace54cdc8cc5
+2025-01-09T08:37:05.235-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.jdbc.mutation          : Inserting collection rows - com.chatgenius.model.Channel.members : a6ce6d4e-8df6-4f99-bfb9-778adf97c0eb
+2025-01-09T08:37:05.235-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.jdbc.mutation          : No collection rows to insert - com.chatgenius.model.Channel.members : a6ce6d4e-8df6-4f99-bfb9-778adf97c0eb
+2025-01-09T08:37:05.235-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.sql.exec               : Skipping reading Query result cache data: cache-enabled = false, cache-mode = NORMAL
+2025-01-09T08:37:05.236-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results                : Initializer list:
+	  com.chatgenius.model.Channel(1604283759200).members -> DelayedCollectionInitializer(com.chatgenius.model.Channel(1604283759200).members)@229388668 (PluralAttribute(com.chatgenius.model.Channel.members))
+	  com.chatgenius.model.Channel(1604283759200) -> EntityResultInitializer(com.chatgenius.model.Channel(1604283759200))@383980581 (SingleTableEntityPersister(com.chatgenius.model.Channel))
+
+2025-01-09T08:37:05.236-06:00 DEBUG 20036 --- [           main] org.hibernate.SQL                        : 
+    select
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.name,
+        c1_0.type 
+    from
+        channels c1_0 
+    where
+        c1_0.type=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.name,
+        c1_0.type 
+    from
+        channels c1_0 
+    where
+        c1_0.type=?
+2025-01-09T08:37:05.248-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results                : Extracted JDBC value [0] - [675320a2-5bdf-49b0-91b3-ace54cdc8cc5]
+2025-01-09T08:37:05.249-06:00 DEBUG 20036 --- [           main] o.hibernate.orm.results.loading.entity   : (EntityResultInitializer) Hydrated EntityKey (com.chatgenius.model.Channel(1604283759200)): 675320a2-5bdf-49b0-91b3-ace54cdc8cc5
+2025-01-09T08:37:05.249-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results                : Extracted JDBC value [0] - [675320a2-5bdf-49b0-91b3-ace54cdc8cc5]
+2025-01-09T08:37:05.249-06:00 DEBUG 20036 --- [           main] o.h.o.r.l.o.h.o.r.loading.collection     : (DelayedCollectionInitializer) Current row collection key : com.chatgenius.model.Channel(1604283759200).members#675320a2-5bdf-49b0-91b3-ace54cdc8cc5
+2025-01-09T08:37:05.249-06:00 DEBUG 20036 --- [           main] org.hibernate.orm.results.loading        : Calling top-level assembler (0 / 1) : org.hibernate.sql.results.graph.entity.internal.EntityAssembler@739481d5
+2025-01-09T08:37:05.250-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 172, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.250-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 173, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.250-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 174, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.250-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 175, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.251-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 176, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.251-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 177, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.251-06:00 DEBUG 20036 --- [           main] org.springframework.test.context.cache   : Spring test ApplicationContext cache statistics: [DefaultContextCache@3bd6ce4e size = 4, maxSize = 32, parentContextCount = 0, hitCount = 178, missCount = 8, failureCount = 1]
+2025-01-09T08:37:05.251-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Initiating transaction rollback
+2025-01-09T08:37:05.251-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Rolling back JPA transaction on EntityManager [SessionImpl(1001304973<open>)]
+2025-01-09T08:37:05.251-06:00 DEBUG 20036 --- [           main] o.h.e.t.internal.TransactionImpl         : rolling back
+2025-01-09T08:37:05.252-06:00 DEBUG 20036 --- [           main] o.s.orm.jpa.JpaTransactionManager        : Closing JPA EntityManager [SessionImpl(1001304973<open>)] after transaction
+2025-01-09T08:37:05.252-06:00 DEBUG 20036 --- [           main] o.s.t.c.transaction.TransactionContext   : Rolled back transaction (1) for test class [com.chatgenius.repository.ChannelRepositoryTest]; test method [findByType_Success]
+2025-01-09T08:37:05.252-06:00 DEBUG 20036 --- [           main] .c.s.DirtiesContextTestExecutionListener : After test method: class [ChannelRepositoryTest], method [findByType_Success], class annotated with @DirtiesContext [false] with mode [null], method annotated with @DirtiesContext [false] with mode [null]
+]]></system-out>
+  </testcase>
+</testsuite>

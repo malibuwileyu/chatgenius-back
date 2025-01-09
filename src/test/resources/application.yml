@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://chatgenius-db.cvmyig8ccjbp.us-east-2.rds.amazonaws.com:5432/chatgenius
+    username: malibu
+    password: G0neCr4zee1!
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+websocket:
+  endpoint: /ws 
