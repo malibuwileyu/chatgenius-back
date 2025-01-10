@@ -126,6 +126,13 @@
 			<version>1.10.1</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Add this dependency -->
+		<dependency>
+			<groupId>it.ozimov</groupId>
+			<artifactId>embedded-redis</artifactId>
+			<version>0.7.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

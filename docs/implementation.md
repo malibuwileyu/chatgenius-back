@@ -379,3 +379,82 @@ AWS S3 is used for file storage:
   - Set up real-time event broadcasting
   - Add WebSocket security
   - Handle connection management
+
+## Spring Security Steps
+
+### 1. Basic Spring Security Setup (Current)
+- [x] Configure SecurityFilterChain
+- [x] Set up PasswordEncoder (BCrypt)
+- [x] Configure AuthenticationManager
+- [x] Set up CORS configuration
+- [x] Configure proper authorization rules
+- [x] Add UserDetailsService implementation
+- [x] Set up role-based authorization
+- [x] Set up SecurityContextHolder configuration
+- [x] Add database schema for user roles
+- [x] Add role-based endpoint protection
+- [x] Add security configuration tests
+  - [x] Test public endpoint access
+  - [x] Test protected endpoint access
+  - [x] Test role-based authorization
+
+### 2. JWT Authentication
+- [x] Complete JwtUtil implementation [2024-01-09 15:20]
+  - [x] Token generation [2024-01-09 15:20]
+  - [x] Token validation [2024-01-09 15:20]
+  - [x] Token blacklisting for logout [2024-01-09 15:20]
+  - [x] Add custom claims (roles, permissions) [2024-01-09 15:20]
+- [x] Implement JwtAuthenticationFilter [2024-01-09 15:20]
+  - [x] Extract JWT from request [2024-01-09 15:20]
+  - [x] Validate JWT [2024-01-09 15:20]
+  - [x] Set Authentication in SecurityContext [2024-01-09 15:20]
+- [x] Configure JWT in SecurityFilterChain [2024-01-09 15:20]
+  - [x] Add JwtAuthenticationFilter to filter chain [2024-01-09 15:20]
+  - [x] Configure stateless session management [2024-01-09 15:20]
+  - [x] Set up proper authentication entry points [2024-01-09 15:20]
+- [x] Add JWT token repository for blacklisting [2024-01-09 15:20]
+- [x] Add JWT authentication tests [2024-01-09 15:20]
+  - [x] Test token generation/validation [2024-01-09 15:20]
+  - [x] Test authentication filter [2024-01-09 15:20]
+  - [x] Test security context management [2024-01-09 15:20]
+
+### 3. OAuth2 Integration
+- [ ] Add OAuth2 dependencies
+- [ ] Configure OAuth2 client properties
+  - [ ] Google provider
+  - [ ] GitHub provider
+- [ ] Implement OAuth2UserService
+- [ ] Set up OAuth2 success/failure handlers
+- [ ] Configure OAuth2 in SecurityFilterChain
+- [ ] Implement OAuth2 to JWT conversion
+- [ ] Add OAuth2 user registration flow
+- [ ] Handle OAuth2 role mapping
+
+### 4. Rate Limiting
+- [ ] Add rate limiting dependencies
+  - [ ] bucket4j
+  - [ ] Spring Cache
+- [ ] Configure rate limit properties
+  - [ ] API endpoints limits
+  - [ ] User-based limits
+  - [ ] IP-based limits
+- [ ] Implement rate limiting filter
+- [ ] Add rate limit headers
+- [ ] Configure cache for rate limits
+- [ ] Set up rate limit monitoring
+- [ ] Add rate limit bypass for admin roles
+
+### 5. Security Hardening
+- [ ] Add security headers
+  - [ ] XSS Protection
+  - [ ] HSTS
+  - [ ] Content Security Policy
+- [ ] Configure CSRF protection for non-API endpoints
+- [ ] Implement request validation
+- [ ] Set up security auditing
+- [ ] Configure error handling
+  - [ ] Custom AuthenticationEntryPoint
+  - [ ] Custom AccessDeniedHandler
+- [ ] Add password complexity requirements
+- [ ] Implement account lockout policy
+- [ ] Add security event logging

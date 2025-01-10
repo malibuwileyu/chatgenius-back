@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/api/messages")
 @Validated
 public class MessageController {
 
@@ -32,74 +34,56 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @GetMapping("/channels/{channelId}/messages")
-    public ResponseEntity<Page<MessageResponse>> getChannelMessages(
-            @PathVariable UUID channelId,
-            Pageable pageable) {
-        Page<Message> messagePage = messageService.getChannelMessages(channelId, pageable);
-        List<MessageResponse> messageResponses = messagePage.getContent().stream()
+    @GetMapping
+    public ResponseEntity<Page<MessageResponse>> getMessages(
+            @RequestParam(required = false) UUID channelId,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        if (channelId == null) {
+            return ResponseEntity.ok(Page.empty(pageable));
+        }
+        Page<Message> messages = messageService.getChannelMessages(channelId, pageable);
+        List<MessageResponse> responses = messages.getContent().stream()
                 .map(MessageResponse::fromMessage)
                 .collect(Collectors.toList());
-        Page<MessageResponse> responsePage = new PageImpl<>(
-                messageResponses, 
-                pageable, 
-                messagePage.getTotalElements()
-        );
-        return ResponseEntity.ok(responsePage);
+        return ResponseEntity.ok(new PageImpl<>(responses, pageable, messages.getTotalElements()));
     }
 
-    @PostMapping("/channels/{channelId}/messages")
+    @PostMapping
     public ResponseEntity<MessageResponse> createMessage(@Valid @RequestBody CreateMessageRequest request) {
         Message message = messageService.createMessage(request);
         return ResponseEntity.ok(MessageResponse.fromMessage(message));
     }
 
-    @GetMapping("/messages/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<MessageResponse> getMessage(@PathVariable UUID id) {
         Message message = messageService.getMessage(id);
         return ResponseEntity.ok(MessageResponse.fromMessage(message));
     }
 
-    @PutMapping("/messages/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<MessageResponse> updateMessage(
             @PathVariable UUID id,
-            @RequestParam @NotBlank(message = "Content cannot be blank") String content) {
+            @RequestBody @NotBlank String content) {
         Message message = messageService.updateMessage(id, content);
         return ResponseEntity.ok(MessageResponse.fromMessage(message));
     }
 
-    @DeleteMapping("/messages/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMessage(@PathVariable UUID id) {
         messageService.deleteMessage(id);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/messages/{threadId}/replies")
-    public ResponseEntity<MessageResponse> createReply(@Valid @RequestBody CreateReplyRequest request) {
+    @PostMapping("/{id}/replies")
+    public ResponseEntity<MessageResponse> createReply(
+            @PathVariable UUID id,
+            @Valid @RequestBody CreateReplyRequest request) {
         Message reply = messageService.createReply(
             request.getContent(),
-            request.getThreadId(),
+            id,
             request.getChannelId(),
             request.getUserId(),
             request.getType());
         return ResponseEntity.ok(MessageResponse.fromMessage(reply));
-    }
-
-    @GetMapping("/messages/{threadId}/replies")
-    public ResponseEntity<List<MessageResponse>> getThreadReplies(@PathVariable UUID threadId) {
-        List<MessageResponse> replies = messageService.getThreadReplies(threadId).stream()
-                .map(MessageResponse::fromMessage)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(replies);
-    }
-
-    @GetMapping("/channels/{channelId}/messages/search")
-    public ResponseEntity<List<MessageResponse>> searchMessages(
-            @PathVariable UUID channelId,
-            @RequestParam @NotBlank(message = "Search keyword cannot be blank") String keyword) {
-        List<MessageResponse> messages = messageService.searchMessages(channelId, keyword).stream()
-                .map(MessageResponse::fromMessage)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(messages);
     }
 } 

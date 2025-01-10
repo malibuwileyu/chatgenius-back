@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
@@ -47,7 +48,7 @@ public class MessageResponse extends BaseResponse {
             if (message.getUser() != null) {
                 response.setUser(UserResponse.fromUser(message.getUser()));
             }
-            
+
             if (message.getChannel() != null) {
                 response.setChannel(ChannelResponse.fromChannel(message.getChannel()));
             }
@@ -55,7 +56,7 @@ public class MessageResponse extends BaseResponse {
             if (message.getThread() != null) {
                 response.setThread(MessageResponse.fromMessage(message.getThread()));
             }
-            
+
             if (message.getReplies() != null) {
                 response.setReplies(message.getReplies().stream()
                         .filter(reply -> reply != null)

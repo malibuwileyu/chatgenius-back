@@ -23,7 +23,7 @@ import java.util.UUID;
 public class DataInitializer {
 
     private static final String TEST_USERNAME = "testuser";
-    private static final UUID TEST_USER_UUID = UUID.fromString("f4f3e8f2-1e36-41c7-b810-2423fe48769a");
+    private static final UUID TEST_USER_UUID = UUID.fromString("c144a9ba-7885-4a71-ba2c-90988a0a94f3");
 
     private User getOrCreateTestUser(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return userRepository.findByUsername(TEST_USERNAME)
@@ -39,10 +39,19 @@ public class DataInitializer {
             });
     }
 
+    @Transactional
     private void addTestUserToChannel(Channel channel, User testUser, ChannelRepository channelRepository) {
-        if (!channel.getMembers().contains(testUser)) {
-            channel.getMembers().add(testUser);
-            channelRepository.save(channel);
+        // First fetch the channel with its members eagerly loaded
+        Channel managedChannel = channelRepository.findById(channel.getId())
+                .map(ch -> {
+                    ch.getMembers().size(); // Initialize the collection
+                    return ch;
+                })
+                .orElseThrow(() -> new RuntimeException("Channel not found"));
+
+        if (!managedChannel.getMembers().contains(testUser)) {
+            managedChannel.getMembers().add(testUser);
+            channelRepository.save(managedChannel);
         }
     }
 
@@ -62,20 +71,23 @@ public class DataInitializer {
                 generalChannel.setName("general");
                 generalChannel.setType(ChannelType.PUBLIC);
                 generalChannel.setCreatedAt(ZonedDateTime.now());
+                generalChannel.getMembers().add(testUser);
                 channelRepository.save(generalChannel);
-                addTestUserToChannel(generalChannel, testUser, channelRepository);
 
                 Channel announcements = new Channel();
                 announcements.setName("announcements");
                 announcements.setType(ChannelType.PUBLIC);
                 announcements.setCreatedAt(ZonedDateTime.now());
+                announcements.getMembers().add(testUser);
                 channelRepository.save(announcements);
-                addTestUserToChannel(announcements, testUser, channelRepository);
             } else {
                 // Add test user to all existing channels
-                channelRepository.findAll().forEach(channel -> 
-                    addTestUserToChannel(channel, testUser, channelRepository)
-                );
+                channelRepository.findAll().forEach(channel -> {
+                    if (!channel.getMembers().contains(testUser)) {
+                        channel.getMembers().add(testUser);
+                        channelRepository.save(channel);
+                    }
+                });
             }
         };
     }

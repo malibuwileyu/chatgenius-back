@@ -1,0 +1,49 @@
+-------------------------------------------------------------------------------
+Test set: com.chatgenius.security.JwtAuthenticationFilterTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 5, Skipped: 0, Time elapsed: 0.159 s <<< FAILURE! -- in com.chatgenius.security.JwtAuthenticationFilterTest
+com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithValidToken_ShouldSetAuthentication -- Time elapsed: 0.149 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "requestPath" is null
+	at com.chatgenius.security.JwtAuthenticationFilter.isPublicEndpoint(JwtAuthenticationFilter.java:102)
+	at com.chatgenius.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:45)
+	at com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithValidToken_ShouldSetAuthentication(JwtAuthenticationFilterTest.java:61)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithNoToken_ShouldNotSetAuthentication -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "requestPath" is null
+	at com.chatgenius.security.JwtAuthenticationFilter.isPublicEndpoint(JwtAuthenticationFilter.java:102)
+	at com.chatgenius.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:45)
+	at com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithNoToken_ShouldNotSetAuthentication(JwtAuthenticationFilterTest.java:92)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithInvalidToken_ShouldNotSetAuthentication -- Time elapsed: 0.002 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "requestPath" is null
+	at com.chatgenius.security.JwtAuthenticationFilter.isPublicEndpoint(JwtAuthenticationFilter.java:102)
+	at com.chatgenius.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:45)
+	at com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithInvalidToken_ShouldNotSetAuthentication(JwtAuthenticationFilterTest.java:79)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithInvalidTokenFormat_ShouldNotSetAuthentication -- Time elapsed: 0 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "requestPath" is null
+	at com.chatgenius.security.JwtAuthenticationFilter.isPublicEndpoint(JwtAuthenticationFilter.java:102)
+	at com.chatgenius.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:45)
+	at com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithInvalidTokenFormat_ShouldNotSetAuthentication(JwtAuthenticationFilterTest.java:105)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithException_ShouldNotSetAuthenticationAndContinueChain -- Time elapsed: 0.005 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "requestPath" is null
+	at com.chatgenius.security.JwtAuthenticationFilter.isPublicEndpoint(JwtAuthenticationFilter.java:102)
+	at com.chatgenius.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:45)
+	at com.chatgenius.security.JwtAuthenticationFilterTest.doFilterInternal_WithException_ShouldNotSetAuthenticationAndContinueChain(JwtAuthenticationFilterTest.java:120)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

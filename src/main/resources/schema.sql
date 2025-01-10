@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS channel_members CASCADE;
 DROP TABLE IF EXISTS channel_invitations CASCADE;
 DROP TABLE IF EXISTS channels CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS user_roles CASCADE;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
@@ -84,4 +85,12 @@ CREATE TABLE IF NOT EXISTS reactions (
     created_at TIMESTAMP NOT NULL,
     FOREIGN KEY (message_id) REFERENCES messages(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- User roles table
+CREATE TABLE IF NOT EXISTS user_roles (
+    user_id UUID NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    PRIMARY KEY (user_id, role),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ); 

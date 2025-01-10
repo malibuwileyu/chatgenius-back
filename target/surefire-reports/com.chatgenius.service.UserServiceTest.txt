@@ -1,4 +1,29 @@
 -------------------------------------------------------------------------------
 Test set: com.chatgenius.service.UserServiceTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.045 s -- in com.chatgenius.service.UserServiceTest
+Tests run: 6, Failures: 1, Errors: 1, Skipped: 0, Time elapsed: 0.047 s <<< FAILURE! -- in com.chatgenius.service.UserServiceTest
+com.chatgenius.service.UserServiceTest.createUser_UsernameExists_ThrowsException -- Time elapsed: 0.006 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Expected com.chatgenius.exception.ValidationException to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:73)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3115)
+	at com.chatgenius.service.UserServiceTest.createUser_UsernameExists_ThrowsException(UserServiceTest.java:84)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.chatgenius.service.UserServiceTest.createUser_Success -- Time elapsed: 0.001 s <<< ERROR!
+org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
+
+Unnecessary stubbings detected.
+Clean & maintainable test code requires zero unnecessary code.
+Following stubbings are unnecessary (click to navigate to relevant line of code):
+  1. -> at com.chatgenius.service.UserServiceTest.createUser_Success(UserServiceTest.java:63)
+  2. -> at com.chatgenius.service.UserServiceTest.createUser_Success(UserServiceTest.java:64)
+  3. -> at com.chatgenius.service.UserServiceTest.createUser_Success(UserServiceTest.java:65)
+Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
+	at org.mockito.junit.jupiter.MockitoExtension.afterEach(MockitoExtension.java:192)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

@@ -54,8 +54,8 @@ public class MessageServiceImpl implements MessageService {
         User user = userRepository.findById(request.getUserId())
             .orElseThrow(() -> new ResourceNotFoundException("User", request.getUserId().toString()));
 
-        // Verify user is member of channel
-        if (!channel.getMembers().contains(user)) {
+        // Verify user is member of channel using the new hasMember method
+        if (!channel.hasMember(user)) {
             throw new ValidationException("User is not a member of this channel");
         }
 

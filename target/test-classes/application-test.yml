@@ -1,40 +1,39 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
-    password: 
+    password:
     driver-class-name: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
-        format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
-  sql:
-    init:
-      mode: always
-  main:
-    allow-bean-definition-overriding: true
-    allow-circular-references: true
 
 jwt:
-  secret: test-secret-key-for-jwt-token-generation-in-tests
-  expiration: 86400000
-  refresh-expiration: 604800000
-
-logging:
-  level:
-    org.springframework: DEBUG
-    org.hibernate: DEBUG
-    com.chatgenius: DEBUG
-
-server:
-  port: 0
+  secret: testSecretKeyForJwtTokenGenerationInTestEnvironment
+  expiration: 3600000
+  refresh-expiration: 86400000
 
 websocket:
-  endpoint: /ws
   allowed-origins: "*"
-  destination-prefix: /topic 
+  endpoint: /ws
+  topic-prefix: /topic
+  application-prefix: /app
+  destination-prefix: /queue
+  user-destination-prefix: /user
+  heartbeat:
+    time: 10000
+    write-timeout: 20000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      enabled: true
+      show-details: always 
