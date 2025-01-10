@@ -5,14 +5,17 @@ com\chatgenius\security\SecurityConfigIntegrationTest.class
 com\chatgenius\service\MessageServiceTest.class
 com\chatgenius\service\ChannelServiceTest.class
 com\chatgenius\util\JwtUtilTest.class
+com\chatgenius\websocket\ChatWebSocketHandlerTest.class
 com\chatgenius\security\JwtAuthenticationFilterTest.class
 com\example\demo\DemoApplicationTests.class
+com\chatgenius\service\S3StorageServiceTest.class
 com\chatgenius\repository\MessageRepositoryTest.class
 com\chatgenius\controller\AuthControllerTest.class
 com\chatgenius\service\UserServiceTest.class
 com\chatgenius\integration\MessageFlowIntegrationTest.class
 com\chatgenius\config\BaseTestConfig.class
 com\chatgenius\config\TestSecurityConfig.class
+com\chatgenius\websocket\PresenceWebSocketHandlerTest.class
 com\chatgenius\repository\UserRepositoryTest.class
 com\chatgenius\service\ChatServiceTest.class
 com\chatgenius\controller\ChannelControllerTest.class

@@ -182,29 +182,29 @@ reaction:updated  - Reaction update notification
 2. WebSocket Infrastructure
    - [x] Configure STOMP WebSocket [2024-01-08 21:00]
    - [x] Configure WebSocket endpoints and broker [2024-01-08 23:45]
-   - [ ] Implement WebSocket handlers:
-     - ChatWebSocketHandler
-     - PresenceWebSocketHandler
-   - [ ] Set up channel subscription handling:
-     - Channel join/leave
-     - Message broadcasting
-     - Presence updates
-     - Typing indicators
-   - [ ] Implement event listeners:
-     - Connection events
-     - Subscription events
-     - Disconnect events
-   - [ ] Add WebSocket security
-   - [ ] Test WebSocket functionality:
-     - Connection management
-     - Message delivery
-     - Presence updates
+   - [x] Implement WebSocket handlers: [2024-01-09 22:00]
+     - [x] ChatWebSocketHandler [2024-01-09 22:00]
+     - [x] PresenceWebSocketHandler [2024-01-09 22:00]
+   - [x] Set up channel subscription handling: [2024-01-09 22:00]
+     - [x] Channel join/leave [2024-01-09 22:00]
+     - [x] Message broadcasting [2024-01-09 22:00]
+     - [x] Presence updates [2024-01-09 22:00]
+     - [x] Typing indicators [2024-01-09 22:00]
+   - [x] Implement event listeners: [2024-01-09 22:00]
+     - [x] Connection events [2024-01-09 22:00]
+     - [x] Subscription events [2024-01-09 22:00]
+     - [x] Disconnect events [2024-01-09 22:00]
+   - [x] Add WebSocket security [2024-01-09 22:30]
+   - [x] Test WebSocket functionality: [2024-01-09 22:30]
+     - [x] Connection management [2024-01-09 22:30]
+     - [x] Message delivery [2024-01-09 22:30]
+     - [x] Presence updates [2024-01-09 22:30]
 
 3. Basic Security Setup
    - [x] Configure Spring Security [2024-01-08 20:45]
-   - [ ] Implement user authentication
-   - [ ] Set up session management
-   - [ ] Add security tests
+   - [x] Implement user authentication [2024-01-09 15:20]
+   - [x] Set up session management [2024-01-09 15:20]
+   - [x] Add security tests [2024-01-09 15:20]
 
 ### Day 3: API & Integration
 1. REST API Implementation
