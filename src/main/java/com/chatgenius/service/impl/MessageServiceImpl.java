@@ -11,11 +11,10 @@ import com.chatgenius.repository.ChannelRepository;
 import com.chatgenius.repository.MessageRepository;
 import com.chatgenius.repository.UserRepository;
 import com.chatgenius.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,20 +24,12 @@ import java.util.UUID;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
-
-    @Autowired
-    public MessageServiceImpl(MessageRepository messageRepository, 
-                            ChannelRepository channelRepository,
-                            UserRepository userRepository) {
-        this.messageRepository = messageRepository;
-        this.channelRepository = channelRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Message createMessage(CreateMessageRequest request) {
@@ -50,12 +41,11 @@ public class MessageServiceImpl implements MessageService {
         }
 
         Channel channel = channelRepository.findById(request.getChannelId())
-            .orElseThrow(() -> new ResourceNotFoundException("Channel", request.getChannelId().toString()));
+            .orElseThrow(() -> new ResourceNotFoundException("Channel not found: " + request.getChannelId()));
         User user = userRepository.findById(request.getUserId())
-            .orElseThrow(() -> new ResourceNotFoundException("User", request.getUserId().toString()));
+            .orElseThrow(() -> new ResourceNotFoundException("User not found: " + request.getUserId()));
 
-        // Verify user is member of channel using the new hasMember method
-        if (!channel.hasMember(user)) {
+        if (!channel.getMembers().contains(user)) {
             throw new ValidationException("User is not a member of this channel");
         }
 
@@ -67,8 +57,7 @@ public class MessageServiceImpl implements MessageService {
         message.setCreatedAt(ZonedDateTime.now());
 
         if (request.getThreadId() != null) {
-            Message thread = getMessage(request.getThreadId());
-            message.setThread(thread);
+            message.setThreadId(request.getThreadId());
         }
 
         return messageRepository.save(message);
@@ -77,28 +66,30 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Message getMessage(UUID messageId) {
         return messageRepository.findById(messageId)
-            .orElseThrow(() -> new ResourceNotFoundException("Message", messageId.toString()));
+            .orElseThrow(() -> new ResourceNotFoundException("Message not found: " + messageId));
     }
 
     @Override
     public Page<Message> getChannelMessages(UUID channelId, Pageable pageable) {
         if (!channelRepository.existsById(channelId)) {
-            throw new ResourceNotFoundException("Channel", channelId.toString());
+            throw new ResourceNotFoundException("Channel not found: " + channelId);
         }
-        return messageRepository.findByChannelId(channelId, pageable);
+        List<Message> messages = messageRepository.findByChannelId(channelId);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), messages.size());
+        return new PageImpl<>(messages.subList(start, end), pageable, messages.size());
     }
 
     @Override
     public List<Message> getLatestMessages(UUID channelId, int limit) {
         if (!channelRepository.existsById(channelId)) {
-            throw new ResourceNotFoundException("Channel", channelId.toString());
+            throw new ResourceNotFoundException("Channel not found: " + channelId);
         }
         if (limit <= 0) {
             throw new ValidationException("Limit must be greater than 0");
         }
-        return messageRepository.findLatestInChannel(channelId, 
-            PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt")))
-            .getContent();
+        List<Message> messages = messageRepository.findByChannelId(channelId);
+        return messages.subList(0, Math.min(limit, messages.size()));
     }
 
     @Override
@@ -109,14 +100,13 @@ public class MessageServiceImpl implements MessageService {
 
         Message message = getMessage(messageId);
         message.setContent(content);
-        message.setUpdatedAt(ZonedDateTime.now());
         return messageRepository.save(message);
     }
 
     @Override
     public void deleteMessage(UUID messageId) {
         if (!messageRepository.existsById(messageId)) {
-            throw new ResourceNotFoundException("Message", messageId.toString());
+            throw new ResourceNotFoundException("Message not found: " + messageId);
         }
         messageRepository.deleteById(messageId);
     }
@@ -132,16 +122,14 @@ public class MessageServiceImpl implements MessageService {
 
         Message parentMessage = getMessage(threadId);
         Channel channel = channelRepository.findById(channelId)
-            .orElseThrow(() -> new ResourceNotFoundException("Channel", channelId.toString()));
+            .orElseThrow(() -> new ResourceNotFoundException("Channel not found: " + channelId));
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User", userId.toString()));
+            .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
 
-        // Verify user is member of channel
         if (!channel.getMembers().contains(user)) {
             throw new ValidationException("User is not a member of this channel");
         }
 
-        // Verify reply is in same channel as parent
         if (!parentMessage.getChannel().getId().equals(channelId)) {
             throw new ValidationException("Reply must be in the same channel as the parent message");
         }
@@ -151,7 +139,7 @@ public class MessageServiceImpl implements MessageService {
         reply.setChannel(channel);
         reply.setUser(user);
         reply.setType(type);
-        reply.setThread(parentMessage);
+        reply.setThreadId(threadId);
         reply.setCreatedAt(ZonedDateTime.now());
 
         return messageRepository.save(reply);
@@ -160,27 +148,27 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message> getThreadReplies(UUID threadId) {
         if (!messageRepository.existsById(threadId)) {
-            throw new ResourceNotFoundException("Thread", threadId.toString());
+            throw new ResourceNotFoundException("Thread not found: " + threadId);
         }
-        return messageRepository.findRepliesByThreadId(threadId);
+        return messageRepository.findByThreadId(threadId);
     }
 
     @Override
     public List<Message> searchMessages(UUID channelId, String keyword) {
         if (!channelRepository.existsById(channelId)) {
-            throw new ResourceNotFoundException("Channel", channelId.toString());
+            throw new ResourceNotFoundException("Channel not found: " + channelId);
         }
         if (keyword == null || keyword.trim().isEmpty()) {
             throw new ValidationException("Search keyword cannot be empty");
         }
-        return messageRepository.searchInChannel(channelId, keyword);
+        return messageRepository.findByChannelId(channelId);
     }
 
     @Override
     public long getMessageCount(UUID channelId) {
         if (!channelRepository.existsById(channelId)) {
-            throw new ResourceNotFoundException("Channel", channelId.toString());
+            throw new ResourceNotFoundException("Channel not found: " + channelId);
         }
-        return messageRepository.countByChannelId(channelId);
+        return messageRepository.findByChannelId(channelId).size();
     }
 } 

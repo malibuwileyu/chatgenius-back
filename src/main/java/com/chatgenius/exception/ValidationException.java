@@ -1,9 +1,11 @@
 package com.chatgenius.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class ValidationException extends ChatGeniusException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class ValidationException extends RuntimeException {
     public ValidationException(String message) {
-        super(message, "VALIDATION_ERROR", HttpStatus.BAD_REQUEST.value());
+        super(message);
     }
 } 

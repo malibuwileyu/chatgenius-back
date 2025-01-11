@@ -1,35 +1,43 @@
 package com.chatgenius.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.chatgenius.websocket.handler.ChatWebSocketHandler;
+import com.chatgenius.websocket.interceptor.AuthenticationHandshakeInterceptor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 @Configuration
-@EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+@EnableWebSocket
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class WebSocketConfig implements WebSocketConfigurer {
 
-    @Value("${websocket.endpoint}")
-    private String endpoint;
+    private final ChatWebSocketHandler chatWebSocketHandler;
+    private final AuthenticationHandshakeInterceptor handshakeInterceptor;
 
-    @Value("${websocket.allowed-origins}")
-    private String allowedOrigins;
-
-    @Value("${websocket.destination-prefix}")
-    private String destinationPrefix;
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker(destinationPrefix);
-        config.setApplicationDestinationPrefixes("/app");
+    public WebSocketConfig(ChatWebSocketHandler chatWebSocketHandler, 
+                         AuthenticationHandshakeInterceptor handshakeInterceptor) {
+        this.chatWebSocketHandler = chatWebSocketHandler;
+        this.handshakeInterceptor = handshakeInterceptor;
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(endpoint)
-                .setAllowedOrigins(allowedOrigins)
-                .withSockJS();
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(chatWebSocketHandler, "/ws/chat")
+               .addInterceptors(handshakeInterceptor)
+               .setAllowedOrigins("http://localhost:3000");
+    }
+
+    @Bean
+    public ServletServerContainerFactoryBean createWebSocketContainer() {
+        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
+        container.setMaxTextMessageBufferSize(8192);
+        container.setMaxBinaryMessageBufferSize(8192);
+        container.setMaxSessionIdleTimeout(60000L);
+        return container;
     }
 } 

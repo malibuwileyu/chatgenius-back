@@ -14,69 +14,115 @@ POST   /api/auth/refresh      - Refresh JWT token
 
 #### User Management
 ```
-GET    /api/users             - List users
-POST   /api/users             - Create user
-GET    /api/users/{id}        - Get user details
-PUT    /api/users/{id}        - Update user
-DELETE /api/users/{id}        - Delete user
-GET    /api/users/{id}/status - Get user online status
+GET    /api/users/me          - Get current user details
 ```
 
 #### Channel Management
 ```
-GET    /api/channels              - List all channels
-POST   /api/channels              - Create new channel
-GET    /api/channels/{id}         - Get channel details
-PUT    /api/channels/{id}         - Update channel
-DELETE /api/channels/{id}         - Delete channel
-GET    /api/channels/{id}/members - List channel members
-POST   /api/channels/{id}/members - Add member to channel
-DELETE /api/channels/{id}/members - Remove member from channel
+GET    /api/channels          - List all channels
+POST   /api/channels          - Create new channel
+GET    /api/channels/{id}     - Get channel details
+PUT    /api/channels/{id}     - Update channel
+DELETE /api/channels/{id}     - Delete channel
 ```
 
 #### Message Management
 ```
-GET    /api/channels/{id}/messages     - Get channel messages
-POST   /api/channels/{id}/messages     - Send message to channel
-GET    /api/messages/{id}              - Get message details
-PUT    /api/messages/{id}              - Update message
-DELETE /api/messages/{id}              - Delete message
-POST   /api/messages/{id}/reactions    - Add reaction to message
-DELETE /api/messages/{id}/reactions    - Remove reaction
+GET    /api/messages                - Get messages (with channelId query param)
+POST   /api/messages                - Send message
+GET    /api/messages/{id}           - Get message details
+PUT    /api/messages/{id}           - Update message content
+DELETE /api/messages/{id}           - Delete message
+POST   /api/messages/{id}/replies   - Create reply to message
 ```
 
 ### WebSocket Events
 
-#### Client Events
+#### Client -> Server Commands
 ```
-channel:join     - Join a channel
-channel:leave    - Leave a channel
-message:send     - Send a message
-typing:start     - Start typing indicator
-typing:stop      - Stop typing indicator
-presence:update  - Update user presence
-reaction:add     - Add reaction to message
-reaction:remove  - Remove reaction from message
+{
+  "type": "chat:message",
+  "data": {
+    "channelId": "UUID",
+    "content": "string"
+  }
+}
+
+{
+  "type": "chat:join",
+  "data": {
+    "channelId": "UUID"
+  }
+}
 ```
 
-#### Server Events
+#### Server -> Client Events
 ```
-channel:joined     - Channel join confirmation
-channel:left      - Channel leave confirmation
-message:received  - New message notification
-typing:updated    - Typing status update
-presence:updated  - User presence update
-error:occurred    - Error notification
-reaction:updated  - Reaction update notification
+{
+  "type": "chat:message",
+  "data": {
+    "id": "UUID",
+    "content": "string",
+    "username": "string",
+    "channelId": "UUID",
+    "threadId": "UUID",
+    "type": "string",
+    "createdAt": "string"
+  }
+}
+
+{
+  "type": "chat:joined",
+  "data": {
+    "channelId": "UUID"
+  }
+}
+
+{
+  "type": "error",
+  "data": {
+    "message": "string"
+  }
+}
+
+{
+  "type": "connected",
+  "data": {
+    "sessionId": "string",
+    "username": "string"
+  }
+}
 ```
 
-#### WebSocket Topics
-```
-/topic/channel.{channelId}         - Channel-specific messages
-/topic/user.{userId}               - User-specific notifications
-/topic/presence.{channelId}        - Channel presence updates
-/topic/typing.{channelId}          - Typing indicators
-/topic/error                       - Error broadcasts
+### WebSocket Connection Flow
+1. Connect to WebSocket endpoint at `/ws/chat?token=JWT_TOKEN`
+2. Receive `connected` event on successful connection
+3. Send `chat:join` to join a channel
+4. After receiving `chat:joined` confirmation, can send `chat:message` to that channel
+
+### WebSocket Authentication Events
+```json
+// Client -> Server
+{
+  "type": "auth",
+  "token": "JWT_TOKEN"
+}
+
+// Server -> Client
+{
+  "type": "auth:success",
+  "data": {
+    "userId": "string",
+    "username": "string"
+  }
+}
+
+{
+  "type": "auth:error",
+  "data": {
+    "message": "string"
+  }
+}
 ```
 
 ## MVP Implementation Checklist
@@ -182,20 +228,20 @@ reaction:updated  - Reaction update notification
 2. WebSocket Infrastructure
    - [x] Configure STOMP WebSocket [2024-01-08 21:00]
    - [x] Configure WebSocket endpoints and broker [2024-01-08 23:45]
-   - [ ] Implement WebSocket handlers:
+   - [x] Implement WebSocket handlers: [2024-01-11 21:00]
      - ChatWebSocketHandler
      - PresenceWebSocketHandler
-   - [ ] Set up channel subscription handling:
+   - [x] Set up channel subscription handling: [2024-01-11 21:00]
      - Channel join/leave
      - Message broadcasting
      - Presence updates
      - Typing indicators
-   - [ ] Implement event listeners:
+   - [x] Implement event listeners: [2024-01-11 21:00]
      - Connection events
      - Subscription events
      - Disconnect events
-   - [ ] Add WebSocket security
-   - [ ] Test WebSocket functionality:
+   - [x] Add WebSocket security [2024-01-11 21:00]
+   - [x] Test WebSocket functionality: [2024-01-11 21:00]
      - Connection management
      - Message delivery
      - Presence updates
@@ -235,7 +281,7 @@ reaction:updated  - Reaction update notification
      ```
 
 2. WebSocket Events Implementation
-   - [ ] Channel Events:
+   - [x] Channel Events: [2024-01-11 21:00]
      ```
      channel:join     -> channel:joined
      channel:leave    -> channel:left
@@ -243,6 +289,9 @@ reaction:updated  - Reaction update notification
    - [ ] Message Events:
      ```
      message:send     -> message:received
+     message:delete   -> message:deleted
+     reaction:add     -> reaction:added
+     reaction:remove  -> reaction:removed
      typing:start     -> typing:updated
      typing:stop      -> typing:updated
      ```

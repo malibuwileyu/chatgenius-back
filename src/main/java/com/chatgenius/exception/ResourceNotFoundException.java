@@ -1,17 +1,11 @@
 package com.chatgenius.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class ResourceNotFoundException extends ChatGeniusException {
-    public ResourceNotFoundException(String resource, String identifier) {
-        super(
-            String.format("%s not found with identifier: %s", resource, identifier),
-            "RESOURCE_NOT_FOUND",
-            HttpStatus.NOT_FOUND.value()
-        );
-    }
-
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {
-        super(message, "RESOURCE_NOT_FOUND", HttpStatus.NOT_FOUND.value());
+        super(message);
     }
 } 

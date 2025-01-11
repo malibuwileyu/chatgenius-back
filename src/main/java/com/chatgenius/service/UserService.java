@@ -16,4 +16,9 @@ public interface UserService extends UserDetailsService {
     boolean existsByEmail(String email);
     User save(User user);
     User findByUsername(String username);
+    
+    // Presence-related methods
+    List<User> getOnlineUsers(UUID channelId);
+    String getUserStatus(UUID userId);
+    void updateUserStatus(UUID userId, String status);
 } 

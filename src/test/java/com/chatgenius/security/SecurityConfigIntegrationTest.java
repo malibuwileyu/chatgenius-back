@@ -3,15 +3,19 @@ package com.chatgenius.security;
 import com.chatgenius.model.Channel;
 import com.chatgenius.model.User;
 import com.chatgenius.model.enums.ChannelType;
+import com.chatgenius.model.enums.UserStatus;
 import com.chatgenius.repository.ChannelRepository;
 import com.chatgenius.service.UserService;
 import com.chatgenius.util.JwtUtil;
+import com.chatgenius.config.TestConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -33,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Import(TestConfig.class)
 class SecurityConfigIntegrationTest {
 
     @Autowired
@@ -73,6 +78,8 @@ class SecurityConfigIntegrationTest {
         admin.setUsername("admin");
         admin.setPassword("$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG");
         admin.setRoles(Set.of("ROLE_ADMIN"));
+        admin.setStatus(UserStatus.OFFLINE);
+        admin.setCreatedAt(ZonedDateTime.now());
         return admin;
     }
 
@@ -81,6 +88,8 @@ class SecurityConfigIntegrationTest {
         moderator.setUsername("moderator");
         moderator.setPassword("$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG");
         moderator.setRoles(Set.of("ROLE_MODERATOR"));
+        moderator.setStatus(UserStatus.OFFLINE);
+        moderator.setCreatedAt(ZonedDateTime.now());
         return moderator;
     }
 

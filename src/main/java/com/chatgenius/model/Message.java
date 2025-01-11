@@ -2,57 +2,48 @@ package com.chatgenius.model;
 
 import com.chatgenius.model.enums.MessageType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 import java.util.UUID;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "messages")
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "channel_id", nullable = false)
-    private Channel channel;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false, length = 20)
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
+
+    @Column(name = "thread_id")
+    private UUID threadId;
+
     @Enumerated(EnumType.STRING)
-    private MessageType type;
+    @Column(nullable = false)
+    private MessageType type = MessageType.TEXT;
 
-    @ManyToOne
-    @JoinColumn(name = "thread_id")
-    private Message thread;
-
-    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Message> replies;
-
-    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
-    private Set<Attachment> attachments;
-
-    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
-    private Set<Reaction> reactions;
-
-    @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private ZonedDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private ZonedDateTime updatedAt;
 } 

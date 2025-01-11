@@ -6,50 +6,58 @@ import com.chatgenius.model.enums.ChannelType;
 import com.chatgenius.model.User;
 import com.chatgenius.repository.ChannelRepository;
 import com.chatgenius.repository.UserRepository;
+import com.chatgenius.repository.MessageRepository;
 import com.chatgenius.service.ChannelService;
 import com.chatgenius.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import java.time.ZonedDateTime;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.HashSet;
 
 @Service
+@Transactional
 public class ChannelServiceImpl implements ChannelService {
 
     private final ChannelRepository channelRepository;
+    private final MessageRepository messageRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public ChannelServiceImpl(ChannelRepository channelRepository, UserRepository userRepository) {
+    public ChannelServiceImpl(ChannelRepository channelRepository, MessageRepository messageRepository, UserRepository userRepository) {
         this.channelRepository = channelRepository;
+        this.messageRepository = messageRepository;
         this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
-    public Channel createChannel(CreateChannelRequest request) {
-        Channel channel = new Channel();
-        channel.setName(request.getName());
-        channel.setType(request.getType());
+    public Channel createChannel(CreateChannelRequest request, String username) {
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Channel channel = Channel.builder()
+                .name(request.getName())
+                .type(request.getType())
+                .createdAt(ZonedDateTime.now())
+                .members(new HashSet<>())
+                .build();
         
-        if (request.getCreatorId() != null) {
-            User creator = userRepository.findById(request.getCreatorId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + request.getCreatorId()));
-            channel.getMembers().add(creator);
-        }
-        
+        channel.getMembers().add(user);
         return channelRepository.save(channel);
     }
 
     @Override
     @Transactional
-    public void addMember(UUID channelId, UUID userId) {
-        Channel channel = getChannel(channelId);
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+    public void addMember(UUID channelId, String username) {
+        Channel channel = getChannelById(channelId);
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
         
         channel.getMembers().add(user);
         channelRepository.save(channel);
@@ -57,13 +65,13 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Channel> getPublicChannels() {
-        return channelRepository.findByType(ChannelType.PUBLIC);
+    public List<Channel> getAllChannels() {
+        return channelRepository.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Channel getChannel(UUID id) {
+    public Channel getChannelById(UUID id) {
         return channelRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Channel not found with id: " + id));
     }
@@ -71,25 +79,26 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     @Transactional
     public void deleteChannel(UUID id) {
-        Channel channel = getChannel(id);
+        Channel channel = getChannelById(id);
+        messageRepository.deleteByChannelId(id);
         channelRepository.delete(channel);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<UUID> getChannelMembers(UUID id) {
-        Channel channel = getChannel(id);
-        return channel.getMembers().stream()
-            .map(User::getId)
-            .collect(Collectors.toList());
+    @Transactional
+    public Channel updateChannel(UUID id, Channel channel) {
+        Channel existingChannel = getChannelById(id);
+        existingChannel.setName(channel.getName());
+        existingChannel.setType(channel.getType());
+        return channelRepository.save(existingChannel);
     }
 
     @Override
     @Transactional
-    public void removeMember(UUID channelId, UUID userId) {
-        Channel channel = getChannel(channelId);
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+    public void removeMember(UUID channelId, String username) {
+        Channel channel = getChannelById(channelId);
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
         
         channel.getMembers().remove(user);
         channelRepository.save(channel);

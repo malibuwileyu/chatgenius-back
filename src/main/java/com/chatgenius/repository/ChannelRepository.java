@@ -14,7 +14,7 @@ import java.util.UUID;
 public interface ChannelRepository extends JpaRepository<Channel, UUID> {
     
     // Find channels by member ID
-    @Query("SELECT c FROM Channel c JOIN c.members m WHERE m.id = :memberId")
+    @Query("SELECT DISTINCT c FROM Channel c JOIN c.members m WHERE m.id = :memberId")
     List<Channel> findByMemberId(@Param("memberId") UUID memberId);
     
     // Find all public channels
@@ -28,4 +28,5 @@ public interface ChannelRepository extends JpaRepository<Channel, UUID> {
     // Additional useful queries
     boolean existsByName(String name);
     List<Channel> findByType(ChannelType type);
+    List<Channel> findByMembersId(UUID userId);
 } 

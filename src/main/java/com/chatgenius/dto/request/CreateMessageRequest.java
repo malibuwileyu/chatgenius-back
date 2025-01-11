@@ -15,13 +15,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateMessageRequest {
-    private UUID channelId;
-    private UUID userId;
-    private UUID threadId;
-    
-    @NotBlank(message = "Message content is required")
+    @NotBlank(message = "Content is required")
     private String content;
+    
+    @NotNull(message = "Channel ID is required")
+    private UUID channelId;
+    
+    @NotNull(message = "User ID is required")
+    private UUID userId;
     
     @NotNull(message = "Message type is required")
     private MessageType type;
+    
+    private UUID threadId;
 } 

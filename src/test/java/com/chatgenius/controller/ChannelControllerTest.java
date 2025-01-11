@@ -1,106 +1,79 @@
 package com.chatgenius.controller;
 
-import com.chatgenius.config.TestSecurityConfig;
 import com.chatgenius.dto.request.CreateChannelRequest;
 import com.chatgenius.model.Channel;
-import com.chatgenius.model.User;
 import com.chatgenius.model.enums.ChannelType;
 import com.chatgenius.service.ChannelService;
-import com.chatgenius.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@Import(TestSecurityConfig.class)
+@ExtendWith(MockitoExtension.class)
 class ChannelControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean
+    @Mock
     private ChannelService channelService;
-
-    @MockBean
-    private UserService userService;
-
-    private UUID userId;
-    private UUID channelId;
-    private User testUser;
-    private Channel testChannel;
-
-    @BeforeEach
-    void setUp() {
-        userId = UUID.randomUUID();
-        channelId = UUID.randomUUID();
-
-        testUser = new User();
-        testUser.setId(userId);
-        testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
-        testUser.setPassword("password123");
-        testUser.setCreatedAt(ZonedDateTime.now());
-
-        testChannel = new Channel();
-        testChannel.setType(ChannelType.PUBLIC);
-        testChannel.setId(channelId);
-        testChannel.setName("test-channel");
-        testChannel.setCreatedAt(ZonedDateTime.now());
-        testChannel.getMembers().add(testUser);
-
-        when(channelService.createChannel(any(CreateChannelRequest.class))).thenReturn(testChannel);
-        doNothing().when(channelService).addMember(any(UUID.class), any(UUID.class));
-    }
+    @InjectMocks
+    private ChannelController channelController;
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
-    void createChannel_Success() throws Exception {
+    void createChannel_Success() {
+        // Given
+        String username = "testuser";
         CreateChannelRequest request = CreateChannelRequest.builder()
-            .name("test-channel")
-            .type(ChannelType.PUBLIC)
-            .build();
+                .name("test-channel")
+                .type(ChannelType.PUBLIC)
+                .build();
+        Channel channel = Channel.builder()
+                .id(UUID.randomUUID())
+                .name(request.getName())
+                .type(request.getType())
+                .createdAt(ZonedDateTime.now())
+                .build();
 
-        mockMvc.perform(post("/channels")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.name").value("test-channel"));
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn(username);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(channelService.createChannel(request, username)).thenReturn(channel);
+
+        // When
+        ResponseEntity<Channel> response = channelController.createChannel(request);
+
+        // Then
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(channel, response.getBody());
+        verify(channelService).createChannel(request, username);
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
-    void addMember_Success() throws Exception {
-        User newUser = new User();
-        newUser.setId(UUID.randomUUID());
-        newUser.setUsername("newuser");
-        newUser.setEmail("newuser@example.com");
+    void addMember_Success() {
+        // Given
+        UUID channelId = UUID.randomUUID();
+        String username = "testuser";
 
-        mockMvc.perform(post("/channels/{channelId}/members/{userId}", channelId, newUser.getId())
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+        doNothing().when(channelService).addMember(channelId, username);
 
-        verify(channelService).addMember(channelId, newUser.getId());
+        // When
+        ResponseEntity<Void> response = channelController.addMember(channelId, username);
+
+        // Then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(channelService).addMember(channelId, username);
     }
 } 

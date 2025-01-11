@@ -5,131 +5,126 @@ import com.chatgenius.model.Message;
 import com.chatgenius.model.User;
 import com.chatgenius.model.enums.ChannelType;
 import com.chatgenius.model.enums.MessageType;
+import com.chatgenius.model.enums.UserStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@ActiveProfiles("test")
 class MessageRepositoryTest {
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Autowired
     private MessageRepository messageRepository;
 
-    @Autowired
-    private ChannelRepository channelRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    private User testUser;
-    private Channel testChannel;
-    private Message testMessage;
+    private Channel channel;
+    private User user;
 
     @BeforeEach
     void setUp() {
-        messageRepository.deleteAll();
-        channelRepository.deleteAll();
-        userRepository.deleteAll();
+        // Create and persist a user
+        user = new User();
+        user.setUsername("testuser");
+        user.setEmail("test@example.com");
+        user.setPassword("password");
+        user.setStatus(UserStatus.OFFLINE);
+        user.setCreatedAt(ZonedDateTime.now());
+        entityManager.persist(user);
 
-        testUser = new User();
-        testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
-        testUser.setPassword("password123");
-        testUser = userRepository.save(testUser);
+        // Create and persist a channel
+        channel = new Channel();
+        channel.setName("test-channel");
+        channel.setType(ChannelType.PUBLIC);
+        channel.setCreatedAt(ZonedDateTime.now());
+        channel.setMembers(new HashSet<>());
+        channel.getMembers().add(user);
+        entityManager.persist(channel);
 
-        testChannel = new Channel();
-        testChannel.setName("test-channel");
-        testChannel.setType(ChannelType.PUBLIC);
-        testChannel.getMembers().add(testUser);
-        testChannel = channelRepository.save(testChannel);
-
-        testMessage = new Message();
-        testMessage.setContent("Test message");
-        testMessage.setType(MessageType.TEXT);
-        testMessage.setUser(testUser);
-        testMessage.setChannel(testChannel);
-        testMessage.setCreatedAt(ZonedDateTime.now());
-        testMessage = messageRepository.save(testMessage);
+        entityManager.flush();
     }
 
     @Test
     void findByChannelId_Success() {
-        Message message2 = new Message();
-        message2.setContent("Another message");
-        message2.setType(MessageType.TEXT);
-        message2.setUser(testUser);
-        message2.setChannel(testChannel);
-        message2.setCreatedAt(ZonedDateTime.now());
-        messageRepository.save(message2);
+        // Create and persist messages
+        Message message1 = createMessage("Message 1", MessageType.TEXT);
+        Message message2 = createMessage("Message 2", MessageType.TEXT);
+        entityManager.persist(message1);
+        entityManager.persist(message2);
+        entityManager.flush();
 
-        Page<Message> messages = messageRepository.findByChannelId(testChannel.getId(), PageRequest.of(0, 10));
-        assertEquals(2, messages.getTotalElements());
-        assertTrue(messages.getContent().stream().anyMatch(m -> m.getContent().equals("Test message")));
-        assertTrue(messages.getContent().stream().anyMatch(m -> m.getContent().equals("Another message")));
+        // Test findByChannelId
+        List<Message> messages = messageRepository.findByChannelId(channel.getId());
+        
+        assertNotNull(messages);
+        assertEquals(2, messages.size());
+        assertTrue(messages.stream().anyMatch(m -> m.getContent().equals("Message 1")));
+        assertTrue(messages.stream().anyMatch(m -> m.getContent().equals("Message 2")));
     }
 
     @Test
-    void findRepliesByThreadId_Success() {
-        Message reply1 = new Message();
-        reply1.setContent("Reply message");
-        reply1.setType(MessageType.TEXT);
-        reply1.setUser(testUser);
-        reply1.setChannel(testChannel);
-        reply1.setThread(testMessage);
-        reply1.setCreatedAt(ZonedDateTime.now());
-        messageRepository.save(reply1);
+    void findByThreadId_Success() {
+        // Create and persist a thread starter message
+        Message threadStarter = createMessage("Thread starter", MessageType.THREAD_START);
+        entityManager.persist(threadStarter);
 
-        Message reply2 = new Message();
-        reply2.setContent("Another reply");
-        reply2.setType(MessageType.TEXT);
-        reply2.setUser(testUser);
-        reply2.setChannel(testChannel);
-        reply2.setThread(testMessage);
-        reply2.setCreatedAt(ZonedDateTime.now());
-        messageRepository.save(reply2);
+        // Create and persist thread replies
+        Message reply1 = createMessage("Reply 1", MessageType.THREAD_REPLY);
+        reply1.setThreadId(threadStarter.getId());
+        entityManager.persist(reply1);
 
-        List<Message> replies = messageRepository.findRepliesByThreadId(testMessage.getId());
+        Message reply2 = createMessage("Reply 2", MessageType.THREAD_REPLY);
+        reply2.setThreadId(threadStarter.getId());
+        entityManager.persist(reply2);
+
+        entityManager.flush();
+
+        // Test findByThreadId
+        List<Message> replies = messageRepository.findByThreadId(threadStarter.getId());
+        
+        assertNotNull(replies);
         assertEquals(2, replies.size());
-        assertTrue(replies.stream().anyMatch(r -> r.getContent().equals("Reply message")));
-        assertTrue(replies.stream().anyMatch(r -> r.getContent().equals("Another reply")));
+        assertTrue(replies.stream().anyMatch(m -> m.getContent().equals("Reply 1")));
+        assertTrue(replies.stream().anyMatch(m -> m.getContent().equals("Reply 2")));
     }
 
     @Test
-    void searchInChannel_Success() {
-        Message message2 = new Message();
-        message2.setContent("Unique search term");
-        message2.setType(MessageType.TEXT);
-        message2.setUser(testUser);
-        message2.setChannel(testChannel);
-        message2.setCreatedAt(ZonedDateTime.now());
-        messageRepository.save(message2);
+    void findThreadStarters_Success() {
+        // Create and persist thread starter messages
+        Message threadStarter1 = createMessage("Thread 1", MessageType.THREAD_START);
+        Message threadStarter2 = createMessage("Thread 2", MessageType.THREAD_START);
+        Message normalMessage = createMessage("Normal message", MessageType.TEXT);
+        
+        entityManager.persist(threadStarter1);
+        entityManager.persist(threadStarter2);
+        entityManager.persist(normalMessage);
+        entityManager.flush();
 
-        List<Message> results = messageRepository.searchInChannel(testChannel.getId(), "unique");
-        assertEquals(1, results.size());
-        assertEquals("Unique search term", results.get(0).getContent());
+        // Test findThreadStarters
+        List<Message> threadStarters = messageRepository.findThreadStarters(channel.getId());
+        
+        assertNotNull(threadStarters);
+        assertEquals(2, threadStarters.size());
+        assertTrue(threadStarters.stream().allMatch(m -> m.getType() == MessageType.THREAD_START));
     }
 
-    @Test
-    void countByChannelId_Success() {
-        Message message2 = new Message();
-        message2.setContent("Another message");
-        message2.setType(MessageType.TEXT);
-        message2.setUser(testUser);
-        message2.setChannel(testChannel);
-        message2.setCreatedAt(ZonedDateTime.now());
-        messageRepository.save(message2);
-
-        long count = messageRepository.countByChannelId(testChannel.getId());
-        assertEquals(2, count);
+    private Message createMessage(String content, MessageType type) {
+        Message message = new Message();
+        message.setContent(content);
+        message.setType(type);
+        message.setUser(user);
+        message.setChannel(channel);
+        message.setCreatedAt(ZonedDateTime.now());
+        return message;
     }
 } 

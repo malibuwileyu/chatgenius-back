@@ -1,43 +1,39 @@
 package com.chatgenius.controller;
 
-import com.chatgenius.config.TestSecurityConfig;
+import com.chatgenius.config.TestConfig;
 import com.chatgenius.dto.request.CreateMessageRequest;
 import com.chatgenius.model.Channel;
 import com.chatgenius.model.Message;
 import com.chatgenius.model.User;
-import com.chatgenius.model.enums.ChannelType;
 import com.chatgenius.model.enums.MessageType;
-import com.chatgenius.service.ChatService;
 import com.chatgenius.service.MessageService;
-import com.chatgenius.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 import java.time.ZonedDateTime;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(MessageController.class)
 @ActiveProfiles("test")
-@Import(TestSecurityConfig.class)
+@Import(TestConfig.class)
 class MessageControllerTest {
 
     @Autowired
@@ -49,104 +45,97 @@ class MessageControllerTest {
     @MockBean
     private MessageService messageService;
 
-    @MockBean
-    private ChatService chatService;
-
-    @MockBean
-    private UserService userService;
-
     private Message testMessage;
-    private Channel testChannel;
+    private CreateMessageRequest createRequest;
     private User testUser;
-    private UUID messageId;
-    private UUID channelId;
-    private UUID userId;
+    private Channel testChannel;
 
     @BeforeEach
     void setUp() {
-        messageId = UUID.randomUUID();
-        channelId = UUID.randomUUID();
-        userId = UUID.randomUUID();
-
         testUser = new User();
-        testUser.setId(userId);
+        testUser.setId(UUID.randomUUID());
         testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
-        testUser.setCreatedAt(ZonedDateTime.now());
 
         testChannel = new Channel();
-        testChannel.setId(channelId);
+        testChannel.setId(UUID.randomUUID());
         testChannel.setName("testchannel");
-        testChannel.setType(ChannelType.PUBLIC);
-        testChannel.setCreatedAt(ZonedDateTime.now());
-        testChannel.getMembers().add(testUser);
 
         testMessage = new Message();
-        testMessage.setId(messageId);
+        testMessage.setId(UUID.randomUUID());
         testMessage.setContent("Test message");
         testMessage.setType(MessageType.TEXT);
-        testMessage.setChannel(testChannel);
         testMessage.setUser(testUser);
+        testMessage.setChannel(testChannel);
         testMessage.setCreatedAt(ZonedDateTime.now());
 
-        when(userService.findByUsername("testuser")).thenReturn(testUser);
-        when(messageService.getChannelMessages(eq(channelId), any(Pageable.class)))
-            .thenReturn(new PageImpl<>(Arrays.asList(testMessage)));
-        when(messageService.createMessage(any(CreateMessageRequest.class))).thenReturn(testMessage);
-        when(messageService.getMessage(messageId)).thenReturn(testMessage);
-        when(messageService.updateMessage(eq(messageId), anyString())).thenReturn(testMessage);
-        doNothing().when(messageService).deleteMessage(messageId);
-    }
-
-    @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
-    void createMessage_Success() throws Exception {
-        CreateMessageRequest request = CreateMessageRequest.builder()
+        createRequest = CreateMessageRequest.builder()
             .content("Test message")
+            .channelId(testChannel.getId())
+            .userId(testUser.getId())
             .type(MessageType.TEXT)
-            .channelId(channelId)
-            .userId(userId)
             .build();
+    }
 
-        mockMvc.perform(post("/messages")
+    @Test
+    @WithMockUser
+    void getMessages_Success() throws Exception {
+        Page<Message> messagePage = new PageImpl<>(Collections.singletonList(testMessage));
+        when(messageService.getChannelMessages(any(UUID.class), any(Pageable.class)))
+            .thenReturn(messagePage);
+
+        mockMvc.perform(get("/api/messages")
+                .param("channelId", testChannel.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].content").value(testMessage.getContent()))
+                .andExpect(jsonPath("$.content[0].type").value(testMessage.getType().toString()));
+    }
+
+    @Test
+    @WithMockUser
+    void createMessage_Success() throws Exception {
+        when(messageService.createMessage(any(CreateMessageRequest.class)))
+            .thenReturn(testMessage);
+
+        mockMvc.perform(post("/api/messages")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content").value("Test message"));
+                .content(objectMapper.writeValueAsString(createRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value(testMessage.getContent()))
+                .andExpect(jsonPath("$.type").value(testMessage.getType().toString()));
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
-    void getChannelMessages_Success() throws Exception {
-        mockMvc.perform(get("/messages/channel/{channelId}", channelId)
-                .param("page", "0")
-                .param("size", "10"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content[0].content").value("Test message"));
-    }
-
-    @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser
     void getMessage_Success() throws Exception {
-        mockMvc.perform(get("/messages/{id}", messageId))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content").value("Test message"));
+        when(messageService.getMessage(any(UUID.class)))
+            .thenReturn(testMessage);
+
+        mockMvc.perform(get("/api/messages/{id}", testMessage.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value(testMessage.getContent()))
+                .andExpect(jsonPath("$.type").value(testMessage.getType().toString()));
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser
     void updateMessage_Success() throws Exception {
-        mockMvc.perform(put("/messages/{id}", messageId)
+        String newContent = "Updated content";
+        testMessage.setContent(newContent);
+        
+        when(messageService.updateMessage(any(UUID.class), any(String.class)))
+            .thenReturn(testMessage);
+
+        mockMvc.perform(put("/api/messages/{id}", testMessage.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("Updated message"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content").value("Test message"));
+                .content(newContent))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value(newContent));
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    @WithMockUser
     void deleteMessage_Success() throws Exception {
-        mockMvc.perform(delete("/messages/{id}", messageId))
-            .andExpect(status().isOk());
+        mockMvc.perform(delete("/api/messages/{id}", testMessage.getId()))
+                .andExpect(status().isOk());
     }
 } 

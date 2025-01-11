@@ -1,5 +1,7 @@
 package com.chatgenius.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.chatgenius.model.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "users")
 @Getter
@@ -52,6 +55,10 @@ public class User implements UserDetails {
 
     @Column(name = "last_seen_at")
     private ZonedDateTime lastSeenAt;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Message> messages = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

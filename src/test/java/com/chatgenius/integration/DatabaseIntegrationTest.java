@@ -5,22 +5,26 @@ import com.chatgenius.model.Message;
 import com.chatgenius.model.User;
 import com.chatgenius.model.enums.ChannelType;
 import com.chatgenius.model.enums.MessageType;
+import com.chatgenius.model.enums.UserStatus;
 import com.chatgenius.repository.ChannelRepository;
 import com.chatgenius.repository.MessageRepository;
 import com.chatgenius.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@ActiveProfiles("test")
 class DatabaseIntegrationTest {
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Autowired
     private UserRepository userRepository;
@@ -31,66 +35,53 @@ class DatabaseIntegrationTest {
     @Autowired
     private MessageRepository messageRepository;
 
-    private User testUser;
-    private Channel testChannel;
-    private Message testMessage;
-
-    @BeforeEach
-    void setUp() {
-        messageRepository.deleteAll();
-        channelRepository.deleteAll();
-        userRepository.deleteAll();
-
-        testUser = new User();
-        testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
-        testUser.setPassword("password123");
-        testUser = userRepository.save(testUser);
-
-        testChannel = new Channel();
-        testChannel.setName("test-channel");
-        testChannel.setType(ChannelType.PUBLIC);
-        testChannel.getMembers().add(testUser);
-        testChannel = channelRepository.save(testChannel);
-
-        testMessage = new Message();
-        testMessage.setContent("Test message");
-        testMessage.setType(MessageType.TEXT);
-        testMessage.setUser(testUser);
-        testMessage.setChannel(testChannel);
-        testMessage.setCreatedAt(ZonedDateTime.now());
-        testMessage = messageRepository.save(testMessage);
-    }
-
     @Test
-    void createMessage_Success() {
-        Message message = new Message();
-        message.setContent("New message");
-        message.setType(MessageType.TEXT);
-        message.setUser(testUser);
-        message.setChannel(testChannel);
-        message.setCreatedAt(ZonedDateTime.now());
+    void testMessageThreading() {
+        // Create user
+        User user = new User();
+        user.setUsername("testuser");
+        user.setEmail("test@example.com");
+        user.setPassword("password");
+        user.setStatus(UserStatus.OFFLINE);
+        user.setCreatedAt(ZonedDateTime.now());
+        entityManager.persist(user);
 
-        Message savedMessage = messageRepository.save(message);
-        assertNotNull(savedMessage.getId());
-        assertEquals("New message", savedMessage.getContent());
-        assertEquals(testUser.getId(), savedMessage.getUser().getId());
-        assertEquals(testChannel.getId(), savedMessage.getChannel().getId());
-    }
+        // Create channel
+        Channel channel = new Channel();
+        channel.setName("test-channel");
+        channel.setType(ChannelType.PUBLIC);
+        channel.setCreatedAt(ZonedDateTime.now());
+        channel.setMembers(new HashSet<>());
+        channel.getMembers().add(user);
+        entityManager.persist(channel);
 
-    @Test
-    void createReply_Success() {
+        // Create thread starter message
+        Message threadStarter = new Message();
+        threadStarter.setContent("Thread starter");
+        threadStarter.setType(MessageType.THREAD_START);
+        threadStarter.setUser(user);
+        threadStarter.setChannel(channel);
+        threadStarter.setCreatedAt(ZonedDateTime.now());
+        entityManager.persist(threadStarter);
+
+        // Create reply
         Message reply = new Message();
-        reply.setContent("Reply message");
-        reply.setType(MessageType.TEXT);
-        reply.setUser(testUser);
-        reply.setChannel(testChannel);
-        reply.setThread(testMessage);
+        reply.setContent("Thread reply");
+        reply.setType(MessageType.THREAD_REPLY);
+        reply.setUser(user);
+        reply.setChannel(channel);
+        reply.setThreadId(threadStarter.getId());
         reply.setCreatedAt(ZonedDateTime.now());
+        entityManager.persist(reply);
 
-        Message savedReply = messageRepository.save(reply);
-        assertNotNull(savedReply.getId());
-        assertEquals("Reply message", savedReply.getContent());
-        assertEquals(testMessage.getId(), savedReply.getThread().getId());
+        entityManager.flush();
+
+        // Test thread retrieval
+        List<Message> threadMessages = messageRepository.findByThreadId(threadStarter.getId());
+        assertEquals(1, threadMessages.size());
+        Message savedReply = threadMessages.get(0);
+        assertEquals("Thread reply", savedReply.getContent());
+        assertEquals(threadStarter.getId(), savedReply.getThreadId());
+        assertEquals(MessageType.THREAD_REPLY, savedReply.getType());
     }
 } 
