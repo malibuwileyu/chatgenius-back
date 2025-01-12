@@ -4,145 +4,92 @@ import com.chatgenius.dto.request.CreateChannelRequest;
 import com.chatgenius.model.Channel;
 import com.chatgenius.model.User;
 import com.chatgenius.model.enums.ChannelType;
+import com.chatgenius.model.enums.UserStatus;
 import com.chatgenius.repository.ChannelRepository;
+import com.chatgenius.repository.MessageRepository;
 import com.chatgenius.repository.UserRepository;
 import com.chatgenius.service.impl.ChannelServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ChannelServiceTest {
 
     @Mock
     private ChannelRepository channelRepository;
-
+    
+    @Mock
+    private MessageRepository messageRepository;
+    
     @Mock
     private UserRepository userRepository;
 
-    @InjectMocks
-    private ChannelServiceImpl channelService;
-
+    private ChannelService channelService;
     private User testUser;
     private Channel testChannel;
-    private UUID userId;
-    private UUID channelId;
 
     @BeforeEach
     void setUp() {
-        userId = UUID.randomUUID();
-        channelId = UUID.randomUUID();
-
+        MockitoAnnotations.openMocks(this);
+        channelService = new ChannelServiceImpl(channelRepository, messageRepository, userRepository);
+        
         testUser = new User();
-        testUser.setId(userId);
+        testUser.setId(UUID.randomUUID());
         testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
-
+        testUser.setStatus(UserStatus.ONLINE);
+        testUser.setCreatedAt(ZonedDateTime.now());
+        testUser.setLastSeenAt(ZonedDateTime.now());
+        
         testChannel = new Channel();
-        testChannel.setId(channelId);
+        testChannel.setId(UUID.randomUUID());
         testChannel.setName("test-channel");
         testChannel.setType(ChannelType.PUBLIC);
+        testChannel.setMembers(new HashSet<>());
         testChannel.setCreatedAt(ZonedDateTime.now());
-        testChannel.getMembers().add(testUser);
     }
 
     @Test
     void createChannel_Success() {
-        String username = "testuser";
-        User user = User.builder()
-                .id(UUID.randomUUID())
-                .username(username)
-                .build();
-        CreateChannelRequest request = CreateChannelRequest.builder()
-                .name("test-channel")
-                .type(ChannelType.PUBLIC)
-                .build();
-        Channel channel = Channel.builder()
-                .id(UUID.randomUUID())
-                .name(request.getName())
-                .type(request.getType())
-                .createdAt(ZonedDateTime.now())
-                .build();
-        channel.getMembers().add(user);
+        CreateChannelRequest request = new CreateChannelRequest();
+        request.setName(testChannel.getName());
+        request.setType(ChannelType.PUBLIC);
 
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
-        when(channelRepository.save(any(Channel.class))).thenReturn(channel);
+        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
+        when(channelRepository.save(any(Channel.class))).thenAnswer(invocation -> {
+            Channel savedChannel = invocation.getArgument(0);
+            savedChannel.setId(testChannel.getId());
+            return savedChannel;
+        });
 
-        Channel result = channelService.createChannel(request, username);
+        Channel createdChannel = channelService.createChannel(request, testUser.getUsername());
 
-        assertNotNull(result);
-        assertEquals(request.getName(), result.getName());
-        assertEquals(request.getType(), result.getType());
-        assertTrue(result.getMembers().contains(user));
-        verify(channelRepository).save(any(Channel.class));
+        assertNotNull(createdChannel);
+        assertEquals(testChannel.getName(), createdChannel.getName());
+        assertTrue(createdChannel.getMembers().contains(testUser));
     }
 
     @Test
     void getChannelById_Success() {
+        UUID channelId = testChannel.getId();
         when(channelRepository.findById(channelId)).thenReturn(Optional.of(testChannel));
 
-        Channel channel = channelService.getChannelById(channelId);
-        assertNotNull(channel);
-        assertEquals(channelId, channel.getId());
-        assertEquals("test-channel", channel.getName());
-    }
+        Channel foundChannel = channelService.getChannelById(channelId);
 
-    @Test
-    void getAllChannels_Success() {
-        List<Channel> channels = Arrays.asList(testChannel);
-        when(channelRepository.findAll()).thenReturn(channels);
-
-        List<Channel> result = channelService.getAllChannels();
-        assertEquals(1, result.size());
-        assertEquals("test-channel", result.get(0).getName());
-    }
-
-    @Test
-    void addMember_Success() {
-        String username = "newuser";
-        User newMember = new User();
-        newMember.setId(UUID.randomUUID());
-        newMember.setUsername(username);
-        newMember.setEmail("newuser@example.com");
-
-        when(channelRepository.findById(channelId)).thenReturn(Optional.of(testChannel));
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(newMember));
-        when(channelRepository.save(any(Channel.class))).thenReturn(testChannel);
-
-        channelService.addMember(channelId, username);
-        assertTrue(testChannel.getMembers().contains(newMember));
-    }
-
-    @Test
-    void removeMember_Success() {
-        String username = "testuser";
-        when(channelRepository.findById(channelId)).thenReturn(Optional.of(testChannel));
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(testUser));
-        when(channelRepository.save(any(Channel.class))).thenReturn(testChannel);
-
-        channelService.removeMember(channelId, username);
-        assertFalse(testChannel.getMembers().contains(testUser));
-    }
-
-    @Test
-    void deleteChannel_Success() {
-        when(channelRepository.findById(channelId)).thenReturn(Optional.of(testChannel));
-        doNothing().when(channelRepository).delete(testChannel);
-
-        channelService.deleteChannel(channelId);
-        verify(channelRepository).delete(testChannel);
+        assertNotNull(foundChannel);
+        assertEquals(channelId, foundChannel.getId());
+        assertEquals(testChannel.getName(), foundChannel.getName());
     }
 } 

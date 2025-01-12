@@ -69,15 +69,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             validateEvent(event);
             
             switch (event.getType()) {
-                case "ping":
-                    log.debug("Received ping from session: {}", sessionId);
-                    // Respond with pong
-                    WebSocketEvent pongEvent = new WebSocketEvent("pong", Map.of(
-                        "timestamp", System.currentTimeMillis()
-                    ));
-                    log.debug("Sending pong to session: {}", sessionId);
-                    sendEvent(session, pongEvent);
-                    break;
                 case "chat:message":
                     handleChatMessage(session, event);
                     break;
@@ -129,53 +120,26 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         
         UUID userId = getUserId(username);
         UUID channelUuid = UUID.fromString(channelId);
-        UUID tempMessageId = UUID.randomUUID();
-        long timestamp = System.currentTimeMillis();
         
-        // Send immediate optimistic response
-        WebSocketEvent optimisticResponse = new WebSocketEvent("chat:message:pending", Map.of(
-            "messageId", tempMessageId.toString(),
+        // Save the message first
+        Message message = chatService.sendMessage(
+            channelUuid,
+            userId,
+            content,
+            MessageType.TEXT
+        );
+        
+        // Then broadcast to all subscribers
+        WebSocketEvent response = new WebSocketEvent("chat:message", Map.of(
+            "messageId", message.getId().toString(),
             "channelId", channelId,
             "userId", username,
             "content", content,
-            "timestamp", timestamp
+            "timestamp", message.getCreatedAt().toInstant().toEpochMilli()
         ));
         
-        broadcastToChannel(channelId, optimisticResponse);
-        
-        try {
-            // Attempt to persist the message
-            Message message = chatService.sendMessage(
-                channelUuid,
-                userId,
-                content,
-                MessageType.TEXT
-            );
-            
-            // Send confirmation with actual message ID
-            WebSocketEvent confirmation = new WebSocketEvent("chat:message:confirmed", Map.of(
-                "tempMessageId", tempMessageId.toString(),
-                "messageId", message.getId().toString(),
-                "channelId", channelId,
-                "userId", username,
-                "content", content,
-                "timestamp", message.getCreatedAt().toInstant().toEpochMilli()
-            ));
-            
-            broadcastToChannel(channelId, confirmation);
-            
-        } catch (Exception e) {
-            // If persistence fails, send rollback event
-            WebSocketEvent rollback = new WebSocketEvent("chat:message:failed", Map.of(
-                "messageId", tempMessageId.toString(),
-                "channelId", channelId,
-                "reason", e.getMessage(),
-                "timestamp", System.currentTimeMillis()
-            ));
-            
-            broadcastToChannel(channelId, rollback);
-            throw e;
-        }
+        log.debug("Broadcasting new message to channel {}. Message ID: {}", channelId, message.getId());
+        broadcastToChannel(channelId, response);
     }
 
     private void handleJoinChannel(WebSocketSession session, WebSocketEvent event) throws Exception {
@@ -194,13 +158,18 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         chatService.addMember(channelUuid, userId);
         addToChannelSubscriptions(session.getId(), channelId);
         
+        log.debug("User {} (session: {}) joined channel {}. Current subscribers: {}", 
+            username, session.getId(), channelId, 
+            channelSubscriptions.getOrDefault(channelId, Collections.emptySet()));
+        
         WebSocketEvent response = new WebSocketEvent("chat:joined", Map.of(
             "channelId", channelId,
             "userId", username,
             "timestamp", System.currentTimeMillis()
         ));
         
-        broadcastToChannel(channelId, response);
+        // Only send the join confirmation to the user who joined
+        sendEvent(session, response);
     }
 
     private void handleLeaveChannel(WebSocketSession session, WebSocketEvent event) throws Exception {
@@ -215,13 +184,18 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         
         removeFromChannelSubscriptions(session.getId(), channelId);
         
+        log.debug("User {} (session: {}) left channel {}. Remaining subscribers: {}", 
+            username, session.getId(), channelId, 
+            channelSubscriptions.getOrDefault(channelId, Collections.emptySet()));
+        
         WebSocketEvent response = new WebSocketEvent("chat:left", Map.of(
             "channelId", channelId,
             "userId", username,
             "timestamp", System.currentTimeMillis()
         ));
         
-        broadcastToChannel(channelId, response);
+        // Only send the leave confirmation to the user who left
+        sendEvent(session, response);
     }
 
     private void handleTypingIndicator(WebSocketSession session, WebSocketEvent event) throws Exception {
@@ -293,11 +267,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void validateEvent(WebSocketEvent event) {
-        if (event == null || event.getType() == null) {
-            throw new IllegalArgumentException("Invalid event format");
-        }
-        // Allow ping events without data
-        if (!event.getType().equals("ping") && event.getData() == null) {
+        if (event == null || event.getType() == null || event.getData() == null) {
             throw new IllegalArgumentException("Invalid event format");
         }
     }
@@ -342,6 +312,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private void broadcastToChannel(String channelId, WebSocketEvent event) {
         Set<String> subscribers = channelSubscriptions.getOrDefault(channelId, Collections.emptySet());
+        log.debug("Broadcasting to channel {}. Subscribers: {}", channelId, subscribers);
+        
         subscribers.stream()
             .map(sessions::get)
             .filter(Objects::nonNull)
@@ -349,6 +321,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             .forEach(session -> {
                 try {
                     sendEvent(session, event);
+                    log.debug("Successfully sent message to session: {}", session.getId());
                 } catch (IOException e) {
                     log.error("Failed to broadcast message to session: {}", session.getId(), e);
                 }

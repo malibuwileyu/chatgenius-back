@@ -54,33 +54,48 @@ class UserServiceTest {
 
     @Test
     void createUser_Success() {
+        // Arrange
         CreateUserRequest request = CreateUserRequest.builder()
-            .username("newuser")
-            .email("new@example.com")
-            .password("password123")
+            .username("testuser")
+            .email("test@example.com")
+            .password("password")
             .build();
 
-        when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        when(userRepository.existsByEmail(anyString())).thenReturn(false);
-        when(passwordEncoder.encode(anyString())).thenReturn("hashedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User savedUser = invocation.getArgument(0);
+            savedUser.setId(UUID.randomUUID());
+            return savedUser;
+        });
 
-        User user = userService.createUser(request);
-        assertNotNull(user);
-        assertEquals(UserStatus.OFFLINE, user.getStatus());
+        // Act
+        User createdUser = userService.createUser(request);
+
+        // Assert
+        assertNotNull(createdUser);
+        assertEquals("testuser", createdUser.getUsername());
+        assertEquals(UserStatus.OFFLINE, createdUser.getStatus());
+        assertNotNull(createdUser.getCreatedAt());
         verify(userRepository).save(any(User.class));
     }
 
     @Test
     void createUser_UsernameExists_ThrowsException() {
+        // Arrange
+        User existingUser = new User();
+        existingUser.setUsername("testuser");
+        existingUser.setEmail("test@example.com");
+        existingUser.setStatus(UserStatus.ONLINE);
+        
+        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(existingUser));
+
         CreateUserRequest request = CreateUserRequest.builder()
-            .username("existinguser")
-            .email("new@example.com")
-            .password("password123")
+            .username("testuser")
+            .email("test2@example.com")
+            .password("password")
             .build();
 
-        when(userRepository.existsByUsername("existinguser")).thenReturn(true);
-
+        // Act & Assert
         assertThrows(ValidationException.class, () -> userService.createUser(request));
         verify(userRepository, never()).save(any(User.class));
     }
