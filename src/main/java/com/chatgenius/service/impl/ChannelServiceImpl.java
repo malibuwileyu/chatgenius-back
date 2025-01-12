@@ -22,18 +22,17 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 
 @Service
-@Transactional
 public class ChannelServiceImpl implements ChannelService {
 
     private final ChannelRepository channelRepository;
-    private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
 
     @Autowired
-    public ChannelServiceImpl(ChannelRepository channelRepository, MessageRepository messageRepository, UserRepository userRepository) {
+    public ChannelServiceImpl(ChannelRepository channelRepository, UserRepository userRepository, MessageRepository messageRepository) {
         this.channelRepository = channelRepository;
-        this.messageRepository = messageRepository;
         this.userRepository = userRepository;
+        this.messageRepository = messageRepository;
     }
 
     @Override
